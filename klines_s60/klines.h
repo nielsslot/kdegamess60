@@ -43,6 +43,7 @@ private Q_SLOTS:
     void loadSettings();
 private:
     MainWidget *mwidget;
+    QAction *m_actShowNext;
 };
 
 #endif

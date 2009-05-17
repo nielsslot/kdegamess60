@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>
+#include <QCoreApplication>
 
 #include "mwidget.h"
 
@@ -35,13 +36,16 @@
 
 KLinesMainWindow::KLinesMainWindow()
 {
+    setWindowTitle( "KLines" );
+
     mwidget = new MainWidget(this);
     setCentralWidget( mwidget );
+
+    connect(mwidget->scene(), SIGNAL(gameOver(int)), SLOT(gameOver(int)));
 /* TODO
 
     connect(mwidget->scene(), SIGNAL(scoreChanged(int)), SLOT(updateScore(int)));
     connect(mwidget->scene(), SIGNAL(stateChanged(const QString &)), SLOT(slotStateChanged(const QString &)));
-    connect(mwidget->scene(), SIGNAL(gameOver(int)), SLOT(gameOver(int)));
 
     statusBar()->insertItem(i18n("Score:"), 0);
     updateScore(0);
@@ -60,60 +64,35 @@ KLinesMainWindow::~KLinesMainWindow()
 
 void KLinesMainWindow::setupActions()
 {
-  QAction *actQuit = new QAction("Quit", this);
-  connect( actQuit, SIGNAL(clicked()), SLOT(close()) );
+    QAction *actNewGame = new QAction("New Game", this);
+    connect( actNewGame, SIGNAL(triggered(bool)), SLOT(startGame()) );
 
-  QMenu* fileMenu = new QMenu("File", this);
-  fileMenu->addAction(actQuit);
+    QAction *actUndo = new QAction("Undo Move", this);
+    connect( actUndo, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(undo()) );
 
-  menuBar()->addMenu(fileMenu);
+    QAction *actEndTurn = new QAction("End Turn", this);
+    connect( actEndTurn, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(endTurn()) );
+
+    m_actShowNext = new QAction("Show Next Balls", this);
+    m_actShowNext->setCheckable(true);
+    m_actShowNext->setChecked(false); // TODO read from app settings
+    mwidget->setShowNextColors(false); // TODO read from app settings
+    connect(m_actShowNext, SIGNAL(triggered(bool)), SLOT(showNextToggled(bool)));
+
+    QAction *actQuit = new QAction("Quit", this);
+    connect( actQuit, SIGNAL(triggered(bool)), qApp, SLOT(quit()) );
+
+    menuBar()->addAction(actNewGame);
+    menuBar()->addAction(actUndo);
+    menuBar()->addAction(actEndTurn);
+    menuBar()->addAction(m_actShowNext);
+    menuBar()->addAction(actQuit);
+
   /* TODO
   // Game
-  KStandardGameAction::gameNew(this, SLOT(startGame()), actionCollection());
   KStandardGameAction::highscores(this, SLOT(viewHighScore()), actionCollection());
-  KStandardGameAction::quit(this, SLOT(close()), actionCollection());
-
-  // Move
-  KStandardGameAction::undo(mwidget->scene(), SLOT(undo()), actionCollection());
-  KStandardGameAction::endTurn(mwidget->scene(), SLOT(endTurn()), actionCollection());
-
-  // Preferences
-  KToggleAction *showNext = actionCollection()->add<KToggleAction>("show_next");
-  showNext->setText( i18n( "Show Next" ) );
-  connect(showNext, SIGNAL(triggered(bool) ), SLOT(showNextToggled(bool)));
-
-  showNext->setChecked(Prefs::showNext());
-  mwidget->setShowNextColors(Prefs::showNext());
-
-  // Navigation
-  KAction* naviLeft = new KAction( KIcon("arrow-left"), i18n("Move Left"), this );
-  naviLeft->setShortcut( Qt::Key_Left );
-  actionCollection()->addAction("navi_left", naviLeft);
-
-  KAction* naviRight = new KAction( KIcon("arrow-right"), i18n("Move Right"), this );
-  naviRight->setShortcut( Qt::Key_Right );
-  actionCollection()->addAction("navi_right", naviRight);
-
-  KAction* naviUp = new KAction( KIcon("arrow-up"), i18n("Move Up"), this );
-  naviUp->setShortcut( Qt::Key_Up );
-  actionCollection()->addAction("navi_up", naviUp);
-
-  KAction* naviDown = new KAction( KIcon("arrow-down"), i18n("Move Down"), this );
-  naviDown->setShortcut( Qt::Key_Down );
-  actionCollection()->addAction("navi_down", naviDown);
-
-  KAction* naviSelect = new KAction( i18n("Select"), this );
-  naviSelect->setShortcut( Qt::Key_Space );
-  actionCollection()->addAction("navi_select", naviSelect);
-
-  connect( naviLeft, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(moveFocusLeft()));
-  connect( naviRight, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(moveFocusRight()));
-  connect( naviUp, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(moveFocusUp()));
-  connect( naviDown, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(moveFocusDown()));
-  connect( naviSelect, SIGNAL(triggered(bool)), mwidget->scene(), SLOT(cellSelected()));
 
   KStandardAction::preferences( this, SLOT( configureSettings() ), actionCollection() );
-  setupGUI();
   */
 }
 
@@ -147,14 +126,23 @@ void KLinesMainWindow::startGame()
 {
 	/* TODO
     updateScore(0);
-    mwidget->scene()->startNewGame();
     */
+    mwidget->scene()->startNewGame();
 }
 
 void KLinesMainWindow::showNextToggled(bool show)
 {
-	/* TODO
     mwidget->setShowNextColors(show);
+
+    QString showNextTxt = m_actShowNext->text();
+    if (show)
+        showNextTxt.replace("Show", "Hide" );
+    else
+        showNextTxt.replace("Hide", "Show" );
+
+    m_actShowNext->setText( showNextTxt );
+
+    /* TODO
     Prefs::setShowNext(show);
     Prefs::self()->writeConfig();
     */
