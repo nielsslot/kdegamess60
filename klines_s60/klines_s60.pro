@@ -3,7 +3,8 @@ TARGET = klines_s60
 QT += core \
     gui \
     svg
-HEADERS += previewitem.h \
+HEADERS += kgamepopupitem.h \
+    previewitem.h \
     commondefs.h \
     mwidget.h \
     klines.h \
@@ -12,7 +13,8 @@ HEADERS += previewitem.h \
     renderer.h \
     animator.h \
     ballitem.h
-SOURCES += previewitem.cpp \
+SOURCES += kgamepopupitem.cpp \
+    previewitem.cpp \
     mwidget.cpp \
     klines.cpp \
     klines_s60.rss \

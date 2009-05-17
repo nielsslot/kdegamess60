@@ -25,6 +25,7 @@
 #include "previewitem.h"
 #include "animator.h"
 #include "renderer.h"
+#include "kgamepopupitem.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
@@ -32,7 +33,6 @@
 #include <QMessageBox>
 
 /* TODO
-#include <KGamePopupItem>
 #include <KLocale>
 */
 #include <QDebug>
@@ -59,10 +59,8 @@ KLinesScene::KLinesScene( QObject* parent )
     m_previewItem = new PreviewItem(this);
     m_previewItem->setPos( 0, 0 );
 
-    /* TODO
     m_popupItem = new KGamePopupItem;
     addItem(m_popupItem);
-    */
 
     startNewGame();
 }
@@ -84,9 +82,7 @@ void KLinesScene::startNewGame()
     m_focusItem->setPos(0, 0);
     m_focusItem->hide();
 
-    /* TODO
     m_popupItem->forceHide();
-    */
 
     // remove all ball items from the scene leaving other items untouched
     QList<QGraphicsItem*> itemlist = items();
@@ -301,10 +297,8 @@ void KLinesScene::selectOrMove( const FieldPos& fpos )
             bool pathExists = m_animator->animateMove(m_selPos, fpos);
             if(!pathExists)
             {
-		    /* TODO
                 m_popupItem->setMessageTimeout(2500);
-                m_popupItem->showMessage(i18n("There is no path from the selected piece to this cell"), KGamePopupItem::BottomLeft);
-		*/
+                m_popupItem->showMessage("This move is not possible", KGamePopupItem::BottomLeft);
             }
         }
     }
@@ -688,8 +682,6 @@ void KLinesScene::gameOverHandler()
     emit gameOver(m_score);
 
     // disable auto-hide
-    /*
     m_popupItem->setMessageTimeout(0);
-    m_popupItem->showMessage(i18n("<h1>Game over</h1>"), KGamePopupItem::Center);
-    */
+    m_popupItem->showMessage("<h1>Game over</h1>", KGamePopupItem::Center);
 }
