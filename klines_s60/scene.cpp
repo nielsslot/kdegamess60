@@ -1,6 +1,6 @@
 /*******************************************************************
  *
- * Copyright 2006-2008 Dmitry Suzdalev <dimsuz@gmail.com>
+ * Copyright 2006-2009 Dmitry Suzdalev <dimsuz@gmail.com>
  *
  * This file is part of the KDE project "KLines"
  *
@@ -32,10 +32,9 @@
 #include <QSet>
 #include <QMessageBox>
 
-/* TODO
-#include <KLocale>
-*/
 #include <QDebug>
+
+static const char SCORE_STATUS_TEXT[] = "<h2>Score: %1</h2>";
 
 inline uint qHash( const FieldPos& pos )
 {
@@ -55,6 +54,13 @@ KLinesScene::KLinesScene( QObject* parent )
     m_focusItem = new QGraphicsRectItem( QRectF(0, 0, m_cellSize, m_cellSize), 0, this );
     m_focusItem->setZValue(1.0);
     m_focusItem->setPen( Qt::DashLine );
+
+    m_scoreItem = new QGraphicsTextItem( 0 );
+    m_scoreItem->setZValue(1.0);
+    m_scoreItem->setHtml( QString(SCORE_STATUS_TEXT).arg( 0 ) );
+    m_scoreItem->setPos(0,0);
+    m_scoreItem->show();
+    addItem(m_scoreItem);
 
     m_previewItem = new PreviewItem(this);
     m_previewItem->setPos( 0, 0 );
@@ -149,6 +155,8 @@ void KLinesScene::resizeScene(int width,int height)
     m_playFieldRect.setHeight( boardSize + m_playFieldBorderSize*2 );
 
     setSceneRect( 0, 0, width, height );
+
+    m_scoreItem->setPos( 5, height - m_scoreItem->boundingRect().height() - 3 );
 
     // sets render sizes for cells
     KLinesRenderer::self()->setCellSize( m_cellSize );
@@ -364,7 +372,10 @@ void KLinesScene::removeAnimFinished()
         m_itemsToDelete.clear();
 
         if(numBallsErased)
+	{
+            m_scoreItem->setHtml( QString(SCORE_STATUS_TEXT).arg( m_score ) );
             emit scoreChanged(m_score);
+	}
     }
 }
 
@@ -649,6 +660,7 @@ void KLinesScene::undo()
 
     m_previewItem->setPreviewColors( m_nextColors );
 
+    m_scoreItem->setHtml( QString(SCORE_STATUS_TEXT).arg( m_score ) );
     emit scoreChanged(m_score);
 
     emit stateChanged("not_undoable");

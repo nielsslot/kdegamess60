@@ -229,6 +229,10 @@ private:
      */
     QGraphicsRectItem *m_focusItem;
     /**
+     * Item for displaying current score
+     */
+    QGraphicsTextItem *m_scoreItem;
+    /**
      *  Item which displays next balls preview
      */
     PreviewItem *m_previewItem;
