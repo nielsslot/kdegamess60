@@ -51,9 +51,11 @@ KLinesScene::KLinesScene( QObject* parent )
     connect( m_animator, SIGNAL(removeFinished()), SLOT(removeAnimFinished() ) );
     connect( m_animator, SIGNAL(bornFinished()), SLOT(bornAnimFinished() ) );
 
+#ifdef USE_FOCUS_ITEM
     m_focusItem = new QGraphicsRectItem( QRectF(0, 0, m_cellSize, m_cellSize), 0, this );
     m_focusItem->setZValue(1.0);
     m_focusItem->setPen( Qt::DashLine );
+#endif
 
     m_scoreItem = new QGraphicsTextItem( 0 );
     m_scoreItem->setZValue(1.0);
@@ -85,8 +87,10 @@ void KLinesScene::startNewGame()
     m_gameOver = false;
     m_itemsToDelete.clear();
     m_nextColors.clear();
+#ifdef USE_FOCUS_ITEM
     m_focusItem->setPos(0, 0);
     m_focusItem->hide();
+#endif
 
     m_popupItem->forceHide();
 
@@ -126,8 +130,10 @@ KLinesScene::~KLinesScene()
 
 void KLinesScene::resizeScene(int width,int height)
 {
+#ifdef USE_FOCUS_ITEM
     // store focus item field pos (calculated using old cellSize)
-    FieldPos focusRectFieldPos = pixToField( m_focusItem->pos() );
+    //FieldPos focusRectFieldPos = pixToField( m_focusItem->pos() );
+#endif
 
     bool hasBorder = KLinesRenderer::self()->hasBorderElement();
 
@@ -173,8 +179,10 @@ void KLinesScene::resizeScene(int width,int height)
             }
         }
 
+#ifdef USE_FOCUS_ITEM
     m_focusItem->setRect( QRect(0,0, m_cellSize, m_cellSize) );
     m_focusItem->setPos( fieldToPix( focusRectFieldPos ) );
+#endif
 
     int previewOriginY = height / 2 - (3 * m_cellSize) / 2;
     int previewOriginX = m_playFieldRect.x() + m_playFieldRect.width();
@@ -527,6 +535,7 @@ void KLinesScene::searchAndErase()
     m_animator->animateRemove( m_itemsToDelete );
 }
 
+#ifdef USE_FOCUS_ITEM
 void KLinesScene::moveFocusLeft()
 {
     if( !m_focusItem->isVisible() )
@@ -592,6 +601,7 @@ void KLinesScene::moveFocusDown()
     m_focusItem->setPos ( fieldToPix( focusPos ) );
 }
 
+
 void KLinesScene::cellSelected()
 {
     if( !m_focusItem->isVisible() )
@@ -600,6 +610,8 @@ void KLinesScene::cellSelected()
     // we're taking the center of the cell
     selectOrMove( pixToField( m_focusItem->pos() + QPointF(m_cellSize/2,m_cellSize/2) ) );
 }
+
+#endif // USE_FOCUS_ITEM
 
 void KLinesScene::saveUndoInfo()
 {

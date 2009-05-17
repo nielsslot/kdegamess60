@@ -27,6 +27,11 @@
 
 #include "commondefs.h"
 
+// Disabled for now, but can be useful for non-touch screen devices
+// (need to implement keyboard events support for that or check that current
+// implementation works)
+//#define USE_FOCUS_ITEM
+
 static const int FIELD_SIZE=9;
 
 class KLinesAnimator;
@@ -106,6 +111,7 @@ public slots:
      *  Undoes one move
      */
     void undo();
+#ifdef USE_FOCUS_ITEM
     /**
      *  Moves keyboard-playing focus rect to the left
      */
@@ -126,6 +132,7 @@ public slots:
      *  Takes corresponding action on cell under focus rect
      */
     void cellSelected();
+#endif
 signals:
     void scoreChanged(int);
     void stateChanged(const QString &);
@@ -224,10 +231,12 @@ private:
      *  Colors of the next turn's balls
      */
     QList<BallColor> m_nextColors;
+#ifdef USE_FOCUS_ITEM
     /**
      *  Keyboard-playing focus indication
      */
     QGraphicsRectItem *m_focusItem;
+#endif
     /**
      * Item for displaying current score
      */
