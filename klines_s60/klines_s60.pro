@@ -26,4 +26,7 @@ SOURCES += kgamepopupitem.cpp \
     ballitem.cpp
 FORMS += klines_s60.ui
 RESOURCES += klines.qrc
-symbian:TARGET.UID3 = 0xE41D776F
+symbian { 
+    TARGET.UID3 = 0xE41D776F
+    ICON = klines.png
+}
