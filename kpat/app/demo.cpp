@@ -2,7 +2,11 @@
 #include "dealer.h"
 #include "render.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cmath>
+#else
+#include <math.h>
+#endif
 
 #include <QPainter>
 #include <QMouseEvent>

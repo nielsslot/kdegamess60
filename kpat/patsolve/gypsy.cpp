@@ -5,6 +5,7 @@
 #include "../app/pile.h"
 #include "../app/deck.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -13,6 +14,7 @@
 #include <sys/types.h>
 #include <cstdarg>
 #include <algorithm>
+#endif
 
 #ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
@@ -382,7 +384,7 @@ int GypsySolver::get_possible_moves(int *a, int *numout)
                     }
                     if ( o > -1 )
                         continue;
-                    mp->pri = ( int )std::min( 127., params[1] + double( l ) * params[5] / 10 );
+                    mp->pri = ( int )qMin( 127., params[1] + double( l ) * params[5] / 10 );
                 }
                 n++;
                 mp++;

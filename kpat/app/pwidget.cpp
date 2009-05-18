@@ -211,13 +211,15 @@ pWidget::pWidget()
     m_stack = new QStackedWidget;
     setCentralWidget( m_stack );
 
-    QSize defaultSize = qApp->desktop()->availableGeometry().size() * 0.7;
 #ifndef Q_OS_SYMBIAN
+    QSize defaultSize = qApp->desktop()->availableGeometry().size() * 0.7;
     setupGUI(defaultSize, Create | Save | ToolBar | StatusBar | Keys);
     statusBar()->insertPermanentItem( "", 1, 0 );
+#else
+    QSize defaultSize = qApp->desktop()->availableGeometry().size();
+    setMinimumSize(defaultSize);
 #endif
 
-    // TODO check that it works
     Render::loadTheme( ":/theme.svg" );
 }
 
@@ -423,7 +425,7 @@ void pWidget::slotGameSelected(int id)
 void pWidget::newGameType(int id)
 {
     slotUpdateMoves();
-    kDebug(11111) << gettime() << "pWidget::newGameType\n";
+    //kDebug(11111) << gettime() << "pWidget::newGameType\n";
 
     if ( !dill )
     {

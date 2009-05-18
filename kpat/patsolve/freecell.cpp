@@ -4,6 +4,7 @@
 #include "../app/freecell.h"
 #include "../app/pile.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -11,6 +12,7 @@
 #include <cmath>
 #include <sys/types.h>
 #include <cstdarg>
+#endif
 
 /* Some macros used in get_possible_moves(). */
 

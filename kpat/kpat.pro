@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 TARGET = kpat
-SUBDIRS =  patsolve app
+SUBDIRS = app \
+    patsolve
 CONFIG += ordered

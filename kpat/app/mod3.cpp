@@ -21,7 +21,7 @@
 #include "mod3.h"
 #include "deck.h"
 #include "hint.h"
-#include "patsolve/mod3.h"
+#include "../patsolve/mod3.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

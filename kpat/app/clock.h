@@ -14,7 +14,7 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
-#include "dealer.h"
+#include "../app/dealer.h"
 
 class Clock : public DealerScene
 {

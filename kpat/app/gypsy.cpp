@@ -13,7 +13,7 @@
 */
 #include "gypsy.h"
 #include "deck.h"
-#include "patsolve/gypsy.h"
+#include "../patsolve/gypsy.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

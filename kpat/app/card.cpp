@@ -23,8 +23,10 @@
 #include "cardmaps.h"
 #include "dealer.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cmath>
 #include <cassert>
+#endif
 
 #include <QPainter>
 //Added by qt3to4:
@@ -40,7 +42,6 @@
 #ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
 #endif
-
 
 // Run time type id
 const int Card::my_type = DealerScene::CardTypeId;
@@ -207,7 +208,7 @@ void Card::moveTo(qreal x2, qreal y2, qreal z2, int duration)
 {
 
     //kDebug(11111) << "Card::moveTo" << x2 << " " << y2 << " " << duration << " " << kBacktrace();
-    if ( fabs( x2 - x() ) < 2 && fabs( y2 - y() ) < 1 )
+    if ( qAbs( x2 - x() ) < 2 && qAbs( y2 - y() ) < 1 )
     {
         setPos( QPointF( x2, y2 ) );
         setZValue( z2 );
@@ -238,7 +239,7 @@ void Card::moveTo(qreal x2, qreal y2, qreal z2, int duration)
     m_destY = y2;
     m_destZ = z2;
 
-    if (fabs( x2 - x() ) < 1 && fabs( y2 - y() ) < 1) {
+    if (qAbs( x2 - x() ) < 1 && qAbs( y2 - y() ) < 1) {
         setZValue(z2);
         return;
     }
@@ -266,7 +267,7 @@ void Card::flipTo(qreal x2, qreal y2, int duration)
     QPointF hp = pos();
     hp.setX( ( x1 + x2 + boundingRect().width() ) / 2 );
     //kDebug(11111) << "flip" << name() << " " << x1 << " " << x2 << " " << y1 << " " << y2;
-    if ( fabs( y1 - y2) > 2 )
+    if ( qAbs( y1 - y2) > 2 )
         hp.setY( ( y1 + y2 + boundingRect().height() ) / 20 );
     //kDebug(11111) << "hp" << pos() << " " << hp << " " << QPointF( x2, y2 );
     animation->setPosAt(0.5, hp );
@@ -297,7 +298,7 @@ void Card::flipAnimationChanged( qreal r)
 {
     if ( r > 0.5 && !isFaceUp() ) {
         flip();
-        assert( m_destFace == m_faceup );
+        Q_ASSERT( m_destFace == m_faceup );
     }
 }
 
@@ -651,10 +652,14 @@ bool Card::collidesWithItem ( const QGraphicsItem * other,
 
 QString gettime()
 {
+#ifndef Q_OS_SYMBIAN
     static struct timeval tv2 = { -1, -1};
     struct timeval tv;
     gettimeofday( &tv, 0 );
     if ( tv2.tv_sec == -1 )
         gettimeofday( &tv2, 0 );
     return QString::number( ( tv.tv_sec - tv2.tv_sec ) * 1000 + ( tv.tv_usec -tv2.tv_usec ) / 1000 );
+#else
+    return "gettime not implemented";
+#endif
 }

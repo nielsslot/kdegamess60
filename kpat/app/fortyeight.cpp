@@ -15,9 +15,7 @@
 #include "fortyeight.h"
 #include "deck.h"
 #include "speeds.h"
-#include "patsolve/fortyeight.h"
-
-#include <cassert>
+#include "../patsolve/fortyeight.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

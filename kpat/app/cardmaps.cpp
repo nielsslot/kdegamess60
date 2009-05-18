@@ -34,10 +34,11 @@
 #warning cardmap should not really require to know the instance!
 #endif
 
+#ifndef Q_OS_SYMBIAN
 #include <cstdlib>
 #include <cstdio>
 #include <unistd.h>
-#include <cassert>
+#endif
 
 #include <QPainter>
 #include <QImage>
@@ -223,7 +224,7 @@ void cardMap::setWantedCardWidth( double w )
 
 cardMap *cardMap::self()
 {
-    assert(_self);
+    Q_ASSERT(_self);
     return _self;
 }
 

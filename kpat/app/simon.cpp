@@ -13,9 +13,7 @@
 */
 #include "simon.h"
 #include "deck.h"
-#include "patsolve/simon.h"
-
-#include <cassert>
+#include "../patsolve/simon.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>
@@ -80,7 +78,7 @@ void Simon::deal() {
         store[j]->add(c, false);
     }
 
-    assert(Deck::deck()->isEmpty());
+    Q_ASSERT(Deck::deck()->isEmpty());
 }
 
 bool Simon::checkPrefering( int checkIndex, const Pile *c1, const CardList& c2) const

@@ -1,8 +1,13 @@
 #include "memory.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <sys/types.h>
 #include <cstdlib>
 #include <cstring>
+#else
+#include <stdlib.h>
+#include <string.h>
+#endif
 
 #include <QtGlobal>
 

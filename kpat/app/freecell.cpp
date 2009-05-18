@@ -21,11 +21,8 @@
 
 #include "freecell.h"
 #include "deck.h"
-#include "patsolve/freecell.h"
+#include "../patsolve/freecell.h"
 #include "speeds.h"
-
-#include <cstdlib>
-#include <cassert>
 
 #include <QTimer>
 #include <QList>
@@ -119,7 +116,7 @@ void Freecell::countFreeCells(int &free_cells, int &free_stores) const
 
 void Freecell::moveCards(CardList &c, FreecellPile *from, Pile *to)
 {
-    assert(c.count() > 1);
+    Q_ASSERT(c.count() > 1);
     setWaiting(true);
 
     from->moveCardsBack(c);
@@ -137,7 +134,7 @@ void Freecell::moveCards(CardList &c, FreecellPile *from, Pile *to)
         if (store[i]->isEmpty() && to != store[i]) fss.append(store[i]);
 
     if (fcs.count() == 0) {
-        assert(fss.count());
+        Q_ASSERT(fss.count());
         fcs.append(fss.last());
         fss.erase(--fss.end());
     }
@@ -174,7 +171,7 @@ void Freecell::movePileToPile(CardList &c, Pile *to, PileList fss, PileList &fcs
         moveaway = count - (fcs.count() + 1);
     }
     while (count > fcs.count() + 1) {
-        assert(fss.count());
+        Q_ASSERT(fss.count());
         MoveAway ma;
         ma.firstfree = fss[0];
         ma.start = start;
@@ -189,7 +186,7 @@ void Freecell::movePileToPile(CardList &c, Pile *to, PileList fss, PileList &fcs
             moveaway = count - (fcs.count() + 1);
     }
     int moving = qMin(count, qMin(c.count() - start, fcs.count() + 1));
-    assert(moving);
+    Q_ASSERT(moving);
 
     for (int i = 0; i < moving - 1; i++) {
         moves.append(new MoveHint(c[c.count() - i - 1 - start], fcs[i], current_weight));
@@ -228,8 +225,8 @@ void Freecell::startMoving()
     moves.erase(moves.begin());
     CardList empty;
     empty.append(mh->card());
-    assert(mh->card() == mh->card()->source()->top());
-    assert(mh->pile()->legalAdd(empty));
+    Q_ASSERT(mh->card() == mh->card()->source()->top());
+    Q_ASSERT(mh->pile()->legalAdd(empty));
     mh->pile()->add(mh->card());
 
     int duration = qMax( DURATION_MOVEBACK * mh->priority() / 1000, 1 );

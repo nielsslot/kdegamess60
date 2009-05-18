@@ -14,7 +14,7 @@
 #include "golf.h"
 #include "speeds.h"
 #include "deck.h"
-#include "patsolve/golf.h"
+#include "../patsolve/golf.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

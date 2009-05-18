@@ -4,6 +4,7 @@
 #include "../app/pile.h"
 #include "memory.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -11,6 +12,9 @@
 #include <cmath>
 #include <cstdarg>
 #include <sys/types.h>
+#else
+#include <math.h>
+#endif
 
 #ifndef Q_OS_SYMBIAN
 #include <kdebug.h>

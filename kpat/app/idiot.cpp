@@ -21,7 +21,7 @@
 
 #include "idiot.h"
 #include "deck.h"
-#include "patsolve/idiot.h"
+#include "../patsolve/idiot.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

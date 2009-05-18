@@ -23,7 +23,11 @@
 #include "dealer.h"
 #include "cardmaps.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cmath>
+#else
+#include <math.h>
+#endif
 
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
