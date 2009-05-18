@@ -1,7 +1,7 @@
 #ifndef PATSOLVE_H
 #define PATSOLVE_H
 
-#include "../hint.h"
+#include "../app/hint.h"
 #include "memory.h"
 
 #include <cstdio>

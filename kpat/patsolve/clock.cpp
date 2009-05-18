@@ -1,9 +1,9 @@
 /* Common routines & arrays. */
 
 #include "clock.h"
-#include "../clock.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/clock.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
