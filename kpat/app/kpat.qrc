@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/" >
         <file>theme.svg</file>
+        <file>nicu-white-deck.svg</file>
 
         <file>demos/demo_1.png</file>
         <file>demos/demo_2.png</file>

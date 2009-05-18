@@ -43,9 +43,6 @@ public:
 #ifndef Q_OS_SYMBIAN
     KPixmapCache* frontcache;
     KPixmapCache* backcache;
-#else
-    QPixmapCache* frontcache;
-    QPixmapCache* backcache;
 #endif
     QMutex* frontcacheMutex;
     QMutex* backcacheMutex;

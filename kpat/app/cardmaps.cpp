@@ -140,8 +140,8 @@ void cardMap::updateTheme()
     QString fronttheme = CardDeckInfo::frontTheme( cs );
     QString backtheme = CardDeckInfo::backTheme( cs );
 #else
-    QString fronttheme = "theme";
-    QString backtheme = "theme";
+    QString fronttheme = "nicu-white-deck";
+    QString backtheme = "nicu-white-deck";
 #endif
 
     Q_ASSERT ( !backtheme.isEmpty() );
