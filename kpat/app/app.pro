@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET =
+TARGET = kpat_s60
 DEPENDPATH += . ../patsolve
 INCLUDEPATH += /home/archuser/src/kdegamess60/kpat/. . ../patsolve
 DEFINES += Q_OS_SYMBIAN
