@@ -548,16 +548,21 @@ void KCardCache::setFrontTheme( const QString& theme )
 #else // Q_OS_SYMBIAN
     QPixmapCache::clear();
 #endif
+
     {
         QMutexLocker l( d->frontRendererMutex );
         delete d->frontRenderer;
         d->frontRenderer = 0;
         if ( CardDeckInfo::isSVGFront( theme ) )
+        {
 #ifndef Q_OS_SYMBIAN
             d->frontRenderer = new KSvgRenderer( CardDeckInfo::frontSVGFilePath( theme ) );
 #else
-            d->frontRenderer = new QSvgRenderer( CardDeckInfo::frontSVGFilePath( theme ) );
+            QString themeRes = ":/"+theme+".svg";
+            d->frontRenderer = new QSvgRenderer( themeRes );
+            qDebug() << "loading" << themeRes;
 #endif
+        }
     }
     d->frontTheme = theme;
 }

@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>theme.svg</file>
+
+        <file>demos/demo_1.png</file>
+        <file>demos/demo_2.png</file>
+        <file>demos/demo_3.png</file>
+        <file>demos/demo_5.png</file>
+        <file>demos/demo_7.png</file>
+        <file>demos/demo_8.png</file>
+        <file>demos/demo_9.png</file>
+        <file>demos/demo_10.png</file>
+        <file>demos/demo_11.png</file>
+        <file>demos/demo_12.png</file>
+        <file>demos/demo_17.png</file>
+        <file>demos/demo_18.png</file>
+    </qresource>
+</RCC>

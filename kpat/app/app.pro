@@ -10,6 +10,8 @@ DEFINES += Q_OS_SYMBIAN
 QT += gui svg xml
 LIBS += -L../patsolve -lpatsolve
 
+RESOURCES += kpat.qrc
+
 # Input
 HEADERS += card.h \
            cardmaps.h \
