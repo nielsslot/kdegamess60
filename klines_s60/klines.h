@@ -37,7 +37,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void viewHighScore();
-    void updateScore(int score);
     void gameOver(int score);
     void showNextToggled(bool show);
     void configureSettings();

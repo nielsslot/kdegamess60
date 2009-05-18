@@ -45,15 +45,6 @@ KLinesMainWindow::KLinesMainWindow()
     setCentralWidget( mwidget );
 
     connect(mwidget->scene(), SIGNAL(gameOver(int)), SLOT(gameOver(int)));
-/* TODO
-
-    connect(mwidget->scene(), SIGNAL(scoreChanged(int)), SLOT(updateScore(int)));
-    connect(mwidget->scene(), SIGNAL(stateChanged(const QString &)), SLOT(slotStateChanged(const QString &)));
-
-    statusBar()->insertItem(i18n("Score:"), 0);
-    updateScore(0);
-
-*/
     setupActions();
 
 /* TODO
@@ -103,13 +94,6 @@ void KLinesMainWindow::setupActions()
   */
 }
 
-void KLinesMainWindow::updateScore(int score)
-{
-	/* TODO
-    statusBar()->changeItem(i18n("Score: %1", score), 0);
-    */
-}
-
 void KLinesMainWindow::gameOver(int score)
 {
 	/* TODO
@@ -154,9 +138,6 @@ void KLinesMainWindow::showAboutDialog()
 
 void KLinesMainWindow::startGame()
 {
-	/* TODO
-    updateScore(0);
-    */
     mwidget->scene()->startNewGame();
 }
 
