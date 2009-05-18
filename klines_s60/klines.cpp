@@ -96,7 +96,7 @@ void KLinesMainWindow::setupActions()
 
 void KLinesMainWindow::gameOver(int score)
 {
-	/* TODO
+    /* TODO
     KScoreDialog d(KScoreDialog::Name | KScoreDialog::Score, this);
     d.setConfigGroup( "Highscore" );
     d.addScore(score, KScoreDialog::AskName);
@@ -106,7 +106,7 @@ void KLinesMainWindow::gameOver(int score)
 
 void KLinesMainWindow::viewHighScore()
 {
-	/* TODO
+    /* TODO
    KScoreDialog d(KScoreDialog::Name | KScoreDialog::Score, this);
    d.setConfigGroup( "Highscore" );
    d.exec();
@@ -117,6 +117,7 @@ void KLinesMainWindow::showAboutDialog()
 {
     SAboutDialog dlg(this);
     dlg.setAppNameAndVersion("KLines", "1.5-s60" );
+    dlg.setLicenseNote("Distributed under the terms of GPL v2 or any later version");
     dlg.addAuthor("Dmitry Suzdalev", "Current maintainer", "dimsuz@gmail.com");
     dlg.addAuthor("Dmitry Suzdalev1", "Port to graphics view and symbian OS. Current maintainer", "dimsuz@gmail.com");
     dlg.addAuthor("Dmitry Suzdalev1", "Port to graphics view and symbian OS. Current maintainer", "dimsuz@gmail.com");

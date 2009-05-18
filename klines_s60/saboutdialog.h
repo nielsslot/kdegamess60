@@ -41,6 +41,8 @@ public:
     virtual ~SAboutDialog();
 
     void setAppNameAndVersion( const QString& appName, const QString& appVer );
+    // aka "Distributed under the terms of GPL v2 or any later version"
+    void setLicenseNote( const QString& licenseNote );
 
     void addAuthor( const QString& name, const QString& description, const QString& email );
     void addCredit( const QString& name, const QString& description, const QString& email );

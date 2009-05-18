@@ -26,8 +26,8 @@ class SAboutDialogPrivate
 public:
     SAboutDialogPrivate() :
         m_wgtScrollArea(0), m_wgtAppInfo(0),
-        m_lblAppNameVer(0), m_lblAuthors(0),
-        m_lblCredits(0)
+        m_lblAppNameVer(0), m_lblLicenseNote(0),
+        m_lblAuthors(0), m_lblCredits(0)
     {}
 
     QScrollArea* m_wgtScrollArea;
@@ -35,6 +35,7 @@ public:
     QWidget* m_wgtAppInfo;
 
     QLabel* m_lblAppNameVer;
+    QLabel* m_lblLicenseNote;
     QLabel* m_lblAuthors;
     QLabel* m_lblCredits;
 };
@@ -55,6 +56,10 @@ SAboutDialog::SAboutDialog(QWidget* parent)
     d->m_wgtAppInfo = new QWidget(this);
 
     d->m_lblAppNameVer = new QLabel(this);
+
+    d->m_lblLicenseNote = new QLabel(this);
+    d->m_lblLicenseNote->hide(); // if no text
+
     d->m_lblAuthors = new QLabel(this);
     d->m_lblAuthors->show();
     d->m_lblAuthors->setWordWrap(true);
@@ -64,6 +69,7 @@ SAboutDialog::SAboutDialog(QWidget* parent)
     QVBoxLayout *lay = new QVBoxLayout(d->m_wgtAppInfo);
     lay->setSpacing( 8 );
     lay->addWidget(d->m_lblAppNameVer);
+    lay->addWidget(d->m_lblLicenseNote);
     lay->addWidget(authorsLabel);
     lay->addWidget(d->m_lblAuthors);
     lay->addWidget(creditsLabel);
@@ -82,6 +88,12 @@ SAboutDialog::~SAboutDialog()
 void SAboutDialog::setAppNameAndVersion(const QString& appName, const QString& appVer)
 {
     d->m_lblAppNameVer->setText("<b>" + appName + " Version " + appVer + "</b>");
+}
+
+void SAboutDialog::setLicenseNote(const QString& licenseNote)
+{
+    d->m_lblLicenseNote->show();
+    d->m_lblLicenseNote->setText(licenseNote);
 }
 
 void SAboutDialog::addAuthor( const QString& name, const QString& description, const QString& email )
