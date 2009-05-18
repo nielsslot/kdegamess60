@@ -23,8 +23,13 @@
 #ifndef PWIDGET_H
 #define PWIDGET_H
 
+#ifndef Q_OS_SYMBIAN
 #include <kxmlguiwindow.h>
 #include <krecentfilesaction.h>
+#else
+#include <QMainWindow>
+#include <QMap>
+#endif
 
 class DemoBubbles;
 class PatienceView;
@@ -37,7 +42,11 @@ class QStackedWidget;
 class cardMap;
 class DealerInfo;
 
+#ifndef Q_OS_SYMBIAN
 class pWidget: public KXmlGuiWindow {
+#else
+class pWidget: public QMainWindow {
+#endif
     Q_OBJECT
 
 public:
@@ -52,9 +61,11 @@ public slots:
     void restart();
     void slotShowGameSelectionScreen();
 
+#ifndef Q_OS_SYMBIAN
     void openGame();
     bool openGame(const KUrl &url, bool addToRecentFiles = true);
     void saveGame();
+#endif
 
     void newGame();
     void chooseGame();
@@ -66,7 +77,9 @@ public slots:
     void enableSolver();
     void enableRememberState();
     void toggleDemoAction(bool active);
+#ifndef Q_OS_SYMBIAN
     void showStats();
+#endif
 
     void slotGameSolverStart();
     void slotGameSolverWon();
@@ -107,7 +120,9 @@ private:
     KToggleAction  *autodropaction;
     KToggleAction  *solveraction;
     KToggleAction  *rememberstateaction;
+#ifndef Q_OS_SYMBIAN
     KRecentFilesAction  *recent;
+#endif
 
     cardMap        *m_cards; // possibly move to PatienceView
     QMap<int, const DealerInfo*>  m_dealer_map;

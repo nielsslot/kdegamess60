@@ -23,9 +23,14 @@
 #include "hint.h"
 #include "patsolve/mod3.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
-
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 //-------------------------------------------------------------------------//
 
@@ -209,10 +214,3 @@ public:
     LocalDealerInfo5() : DealerInfo(I18N_NOOP("Mod3"), 5) {}
     virtual DealerScene *createGame() const { return new Mod3(); }
 } ldi5;
-
-//-------------------------------------------------------------------------//
-
-#include "mod3.moc"
-
-//-------------------------------------------------------------------------//
-

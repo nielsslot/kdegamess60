@@ -7,8 +7,12 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
 #include <klocale.h>
+#else
+#define i18n // dummy
+#endif
 
 class GameBubble
 {
@@ -201,7 +205,7 @@ void DemoBubbles::paintEvent ( QPaintEvent * )
         const GameBubble & bubble = m_bubbles[index];
 
         painter.drawPixmap( bubble.x, bubble.y,
-                            Render::renderElement( bubble.active ? "bubble_hover" : "bubble", 
+                            Render::renderElement( bubble.active ? "bubble_hover" : "bubble",
                                                    QSize(bubble_width, bubble_height) ) );
 
         QSize size( bubble_width - inner_margin * 2, bubble_height - inner_margin * 2 - bubble_text_height );

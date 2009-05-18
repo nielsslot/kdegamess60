@@ -25,9 +25,15 @@
 
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
 #include <kaction.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 Grandf::Grandf( )
     : DealerScene(  )
@@ -177,5 +183,3 @@ public:
     LocalDealerInfo1() : DealerInfo(I18N_NOOP("Grandfather"), 1) {}
     virtual DealerScene *createGame() const { return new Grandf(); }
 } gfdi;
-
-#include "grandf.moc"

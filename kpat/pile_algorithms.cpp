@@ -13,7 +13,12 @@
 */
 #include "pile.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define kDebug(arg) qDebug()
+#endif
 
 bool Pile::add_klondikeTarget( const CardList& c2 ) const
 {

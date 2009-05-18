@@ -33,6 +33,7 @@
 
 #include <QApplication>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
 #include <klocale.h>
 #include <kselectaction.h>
@@ -40,6 +41,11 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <kconfiggroup.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 KlondikePile::KlondikePile( int _index, int _draw, DealerScene* parent)
     : Pile(_index, parent), m_draw( _draw )
@@ -93,8 +99,13 @@ Klondike::Klondike()
 
     Deck::create_deck(this);
     Deck::deck()->setPilePos(margin, margin );
+#ifndef Q_OS_SYMBIAN
     KConfigGroup cg(KGlobal::config(), settings_group );
     EasyRules = cg.readEntry( "KlondikeEasy", true);
+#else
+    // TODO read from config?
+    EasyRules = true;
+#endif
 
     pile = new KlondikePile( 13, EasyRules ? 1 : 3, this);
     pile->setObjectName( "pile" );
@@ -133,6 +144,7 @@ Klondike::Klondike()
     setSolver( new KlondikeSolver( this, pile->draw() ) );
     redealt = false;
 
+#ifndef Q_OS_SYMBIAN
     options = new KSelectAction(i18n("Klondike &Options"), this );
 
     KXmlGuiWindow *xmlgui = PatienceView::instance()->mainWindow();
@@ -148,6 +160,7 @@ Klondike::Klondike()
 
     xmlgui->guiFactory()->plugActionList( xmlgui, QString::fromLatin1("dealer_options"), actionlist);
     connect( options, SIGNAL( triggered( int ) ), SLOT( gameTypeChanged() ) );
+#endif
 }
 
 Card *Klondike::newCards()
@@ -198,10 +211,12 @@ void Klondike::restart()
 
 void Klondike::gameTypeChanged()
 {
+#ifndef Q_OS_SYMBIAN
     if ( demoActive() || isGameWon()  )
        return;
 
     setEasy( options->currentItem() == 0 );
+#endif
 }
 
 QString Klondike::getGameState()
@@ -217,7 +232,9 @@ void Klondike::setEasy( bool _EasyRules )
 {
     EasyRules = _EasyRules;
     pile->setDraws( EasyRules ? 1 : 3 );
+#ifndef Q_OS_SYMBIAN
     options->setCurrentItem( EasyRules ? 0 : 1 );
+#endif
 
     for( int i = 0; i < 4; i++ ) {
         if (EasyRules) // change default
@@ -225,9 +242,12 @@ void Klondike::setEasy( bool _EasyRules )
         else
             target[i]->setRemoveType(Pile::KlondikeTarget);
     }
+    // TODO write config for S60?
+#ifndef Q_OS_SYMBIAN
     KConfigGroup cg(KGlobal::config(), settings_group );
     cg.writeEntry( "KlondikeEasy", EasyRules);
     cg.sync();
+#endif
 
     startNew();
 }
@@ -306,5 +326,3 @@ void Klondike::mapOldId(int id)
        setEasy( true );
    }
 }
-
-#include "klondike.moc"

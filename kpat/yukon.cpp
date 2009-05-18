@@ -18,8 +18,14 @@
 
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 Yukon::Yukon( )
     : DealerScene( )
@@ -80,5 +86,3 @@ public:
     LocalDealerInfo10() : DealerInfo(I18N_NOOP("Yukon"), 10) {}
     virtual DealerScene *createGame() const { return new Yukon(); }
 } gfi10;
-
-#include "yukon.moc"

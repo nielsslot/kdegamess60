@@ -31,6 +31,7 @@
 #include <QtGui/QResizeEvent>
 #include <QDomDocument>
 
+#ifndef Q_OS_SYMBIAN
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -39,9 +40,17 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
+#else
+#include <QApplication>
+#include <QDebug>
+#define kError qDebug
+#define i18n // dummy
+#endif
 
 
+#ifndef Q_OS_SYMBIAN
 static const char description[] = I18N_NOOP("KDE Patience Game");
+#endif
 
 static DealerScene *getDealer( int wanted_game )
 {
@@ -114,6 +123,7 @@ void sendAllPendingResizeEvents( QWidget * widget )
 
 int main( int argc, char **argv )
 {
+#ifndef Q_OS_SYMBIAN
     KAboutData aboutData( "kpat", 0, ki18n("KPatience"),
                           KPAT_VERSION, ki18n(description), KAboutData::License_GPL,
                           ki18n("(c) 1995, Paul Olav Tvete\n"
@@ -139,6 +149,7 @@ int main( int argc, char **argv )
     // the names of the game types in the help text.
     KComponentData componentData(&aboutData);
     KGlobal::locale()->insertCatalog("libkdegames");
+#endif
 
     QMap<QString, int> indexMap;
     QStringList gameList;
@@ -151,6 +162,7 @@ int main( int argc, char **argv )
     }
     gameList.sort();
 
+#ifndef Q_OS_SYMBIAN
     KCmdLineArgs::init( argc, argv, &aboutData );
 
     KCmdLineOptions options;
@@ -162,9 +174,15 @@ int main( int argc, char **argv )
     options.add("+file", ki18n("File to load"));
     KCmdLineArgs::addCmdLineOptions (options);
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+#endif
 
+#ifndef Q_OS_SYMBIAN
     KApplication application;
+#else
+    QApplication application(argc, argv);
+#endif
 
+#ifndef Q_OS_SYMBIAN
     QString savegame = args->getOption( "solvegame" );
     if ( !savegame.isEmpty() )
     {
@@ -238,9 +256,11 @@ int main( int argc, char **argv )
 
     QString gametype = args->getOption("gametype").toLower();
     QFile savedState( KStandardDirs::locateLocal("appdata", saved_state_file) );
+#endif
 
     pWidget *w = new pWidget;
     sendAllPendingResizeEvents(w);
+#ifndef Q_OS_SYMBIAN
     if (args->count())
     {
         if (!w->openGame(args->url(0)))
@@ -260,8 +280,13 @@ int main( int argc, char **argv )
     {
         w->slotShowGameSelectionScreen();
     }
+#else
+    w->slotShowGameSelectionScreen();
+#endif
     w->show();
 
+#ifndef Q_OS_SYMBIAN
     args->clear();
+#endif
     return application.exec();
 }

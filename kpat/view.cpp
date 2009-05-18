@@ -28,7 +28,13 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QWheelEvent>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#else
+#include <QMainWindow>
+#include <QDebug>
+#define kDebug(arg) qDebug()
+#endif
 
 // ================================================================
 //                        class PatienceView
@@ -36,7 +42,11 @@
 
 PatienceView *PatienceView::s_instance = 0;
 
+#ifndef Q_OS_SYMBIAN
 PatienceView::PatienceView( KXmlGuiWindow* _window, QWidget* _parent )
+#else
+PatienceView::PatienceView( QMainWindow* _window, QWidget* _parent )
+#endif
   : QGraphicsView( _parent ),
     m_window( _window )
 {
@@ -65,7 +75,11 @@ PatienceView::~PatienceView()
     delete dscene();
 }
 
+#ifndef Q_OS_SYMBIAN
 KXmlGuiWindow *PatienceView::mainWindow() const
+#else
+QMainWindow *PatienceView::mainWindow() const
+#endif
 {
     return m_window;
 }
@@ -126,5 +140,3 @@ void PatienceView::resizeEvent( QResizeEvent *e )
         kDebug(11111) << "resizeEvent ignored" << e->size();
     }
 }
-
-#include "view.moc"

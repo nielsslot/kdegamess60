@@ -17,7 +17,11 @@
 
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
+#else
+#define I18N_NOOP
+#endif
 
 Clock::Clock( )
     : DealerScene( )

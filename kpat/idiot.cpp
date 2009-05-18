@@ -23,7 +23,11 @@
 #include "deck.h"
 #include "patsolve/idiot.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
+#else
+#define I18N_NOOP // dummy
+#endif
 
 Idiot::Idiot( )
   : DealerScene( )
@@ -174,6 +178,3 @@ public:
     LocalDealerInfo2() : DealerInfo(I18N_NOOP("Aces Up"), 2) {}
     virtual DealerScene *createGame() const { return new Idiot(); }
 } ldi4;
-
-
-#include "idiot.moc"

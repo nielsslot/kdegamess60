@@ -61,7 +61,10 @@ private:
     bool EasyRules;
     bool redealt;
 
+#ifndef Q_OS_SYMBIAN
+    // TODO reenable?
     KSelectAction *options;
+#endif
 
     Pile* play[7];
     Pile* target[4];

@@ -17,8 +17,14 @@
 
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 Simon::Simon( )
     : DealerScene( )
@@ -139,5 +145,3 @@ public:
     LocalDealerInfo9() : DealerInfo(I18N_NOOP("Simple Simon"), 9) {}
     virtual DealerScene *createGame() const { return new Simon(); }
 } gfi9;
-
-#include "simon.moc"

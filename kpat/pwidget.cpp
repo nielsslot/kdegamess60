@@ -23,16 +23,28 @@
 #include "dealer.h"
 #include "view.h"
 #include "cardmaps.h"
+
+#ifndef Q_OS_SYMBIAN
 #include "gamestatsimpl.h"
+#endif
+
 #include "demo.h"
 #include "render.h"
+
+#ifndef Q_OS_SYMBIAN
 #include <carddeckinfo.h>
+#else
+#include "carddeckinfo.h"
+#endif
+
 
 #include <QTimer>
 #include <QList>
 #include <QDomDocument>
 #include <QDesktopWidget>
 #include <QStackedWidget>
+
+#ifndef Q_OS_SYMBIAN
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -58,11 +70,29 @@
 #include <kconfiggroup.h>
 #include <kxmlguifactory.h>
 
+#else
+
+#include <QApplication>
+#include <QDebug>
+
+#define kDebug(arg) qDebug()
+
+// emulate krandom
+namespace KRandom
+{
+    static int random() { return qrand(); }
+} // namespace KRandom
+
+#endif // Q_OS_SYMBIAN
 
 static pWidget *current_pwidget = 0;
 
 pWidget::pWidget()
+#ifndef Q_OS_SYMBIAN
   : KXmlGuiWindow(0),
+#else
+  : QMainWindow(0),
+#endif
     dill(0),
     m_dealer(0),
     m_bubbles(0)
@@ -72,11 +102,14 @@ pWidget::pWidget()
     // KCrash::setEmergencySaveFunction(::saveGame);
 
     // Game
+// TODO actions
+#if 0
     KStandardGameAction::gameNew(this, SLOT(newGame()), actionCollection());
     KStandardGameAction::restart(this, SLOT(restart()), actionCollection());
     KStandardGameAction::load(this, SLOT(openGame()), actionCollection());
     recent = KStandardGameAction::loadRecent(this, SLOT(openGame(const KUrl&)), actionCollection());
     recent->loadEntries(KGlobal::config()->group( QString() ));
+
     KStandardGameAction::save(this, SLOT(saveGame()), actionCollection());
     KStandardGameAction::quit(this, SLOT(close()), actionCollection());
 
@@ -162,6 +195,7 @@ pWidget::pWidget()
     actionCollection()->addAction("remember_state", rememberstateaction);
     connect( rememberstateaction, SIGNAL( triggered( bool ) ), SLOT( enableRememberState() ) );
     rememberstateaction->setChecked( cg.readEntry("RememberStateOnExit", false) );
+#endif
 
     foreach( const DealerInfo * di, DealerInfoList::self()->games() )
     {
@@ -178,15 +212,20 @@ pWidget::pWidget()
     setCentralWidget( m_stack );
 
     QSize defaultSize = qApp->desktop()->availableGeometry().size() * 0.7;
+#ifndef Q_OS_SYMBIAN
     setupGUI(defaultSize, Create | Save | ToolBar | StatusBar | Keys);
     statusBar()->insertPermanentItem( "", 1, 0 );
+#endif
 
-    Render::loadTheme( KStandardDirs::locate( "data", "kpat/theme.svgz" ) );
+    // TODO check that it works
+    Render::loadTheme( ":/theme.svg" );
 }
 
 pWidget::~pWidget()
 {
+#ifndef Q_OS_SYMBIAN
     recent->saveEntries(KGlobal::config()->group( QString() ));
+#endif
 
     delete dill;
     delete m_cards;
@@ -204,6 +243,7 @@ void pWidget::redoMove() {
 
 void pWidget::helpGame()
 {
+#ifndef Q_OS_SYMBIAN
     if (m_dealer && m_dealer_map.contains(m_dealer->gameId()))
     {
         const DealerInfo * di = m_dealer_map.value(m_dealer->gameId());
@@ -212,13 +252,20 @@ void pWidget::helpGame()
 
         KToolInvocation::invokeHelp(anchor);
     }
+#endif
 }
 
 void pWidget::enableAutoDrop()
 {
+    // TODO config for s60?
+#ifndef Q_OS_SYMBIAN
     bool drop = autodropaction->isChecked();
     KConfigGroup cg(KGlobal::config(), settings_group );
     cg.writeEntry( "Autodrop", drop);
+#else
+    bool drop = true;
+#endif
+
     if ( m_dealer )
         m_dealer->setAutoDropEnabled(drop);
     updateGameActionList();
@@ -226,17 +273,25 @@ void pWidget::enableAutoDrop()
 
 void pWidget::enableSolver()
 {
+    // TODO config for s60?
+#ifndef Q_OS_SYMBIAN
     bool solver = solveraction->isChecked();
     KConfigGroup cg(KGlobal::config(), settings_group );
     cg.writeEntry( "Solver", solver );
+#else
+    bool solver = true;
+#endif
     if ( m_dealer )
         m_dealer->setSolverEnabled(solver);
 }
 
 void pWidget::enableRememberState()
 {
+    // TODO config for s60?
+#ifndef Q_OS_SYMBIAN
     KConfigGroup cg(KGlobal::config(), settings_group );
     cg.writeEntry( "RememberStateOnExit", rememberstateaction->isChecked() );
+#endif
 }
 
 void pWidget::newGame()
@@ -257,7 +312,9 @@ void pWidget::startRandom()
 
 void pWidget::startNew(long gameNumber)
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->clearMessage();
+#endif
     m_dealer->startNew(gameNumber);
     setGameCaption();
 }
@@ -267,16 +324,23 @@ void pWidget::slotPickRandom()
     QString theme = CardDeckInfo::randomFrontName();
     kDebug(11111) << "theme" << theme;
 
+#ifndef Q_OS_SYMBIAN
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup cs(config, settings_group );
     CardDeckInfo::writeFrontTheme( cs, theme );
+#endif
 
+#ifndef Q_OS_SYMBIAN
     cardMap::self()->updateTheme(cs);
+#else
+    cardMap::self()->updateTheme();
+#endif
     cardMap::self()->triggerRescale();
 }
 
 void pWidget::slotSelectDeck()
 {
+#ifndef Q_OS_SYMBIAN
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup cs(config, settings_group);
     KCardWidget* cardwidget = new KCardWidget();
@@ -302,6 +366,7 @@ void pWidget::slotSelectDeck()
             cardMap::self()->triggerRescale();
         }
     }
+#endif
 }
 
 void pWidget::setGameCaption()
@@ -312,11 +377,17 @@ void pWidget::setGameCaption()
         const DealerInfo * di = m_dealer_map.value( m_dealer->gameId() );
         caption = QString("%1 - %2").arg(di->name).arg(m_dealer->gameNumber());
     }
+#ifndef Q_OS_SYMBIAN
     setCaption( caption );
+#else
+    setWindowTitle( caption );
+#endif
 }
 
 bool pWidget::allowedToStartNewGame()
 {
+    // TODO?
+#ifndef Q_OS_SYMBIAN
     // Check if the user is already running a game, and if she is,
     // then ask if she wants to abort it.
     return !m_dealer
@@ -335,6 +406,9 @@ bool pWidget::allowedToStartNewGame()
                                                  KStandardGuiItem::cancel(),
                                                  "careaboutstats"
                                                 ) == KMessageBox::Continue;
+#else
+    return true;
+#endif
 }
 
 void pWidget::slotGameSelected(int id)
@@ -365,13 +439,22 @@ void pWidget::newGameType(int id)
     const DealerInfo * di = m_dealer_map.value(id, DealerInfoList::self()->games().first());
     m_dealer = di->createGame();
     m_dealer->setGameId( di->ids.first() );
+
+    // TODO config for s60
+#ifndef Q_OS_SYMBIAN
     m_dealer->setAutoDropEnabled( autodropaction->isChecked() );
     m_dealer->setSolverEnabled( solveraction->isChecked() );
+#else
+    m_dealer->setAutoDropEnabled( true );
+    m_dealer->setSolverEnabled( true );
+#endif
 
     dill->setScene( m_dealer );
     m_stack->setCurrentWidget(dill);
 
+#ifndef Q_OS_SYMBIAN
     gamehelpaction->setText(i18n("Help &with %1", QString(di->name).replace('&', "&&")));
+#endif
 
     connect(m_dealer, SIGNAL(gameLost()), SLOT(gameLost()));
     connect(m_dealer, SIGNAL(gameInfo(QString)), SLOT(slotGameInfo(QString)));
@@ -402,7 +485,9 @@ void pWidget::slotShowGameSelectionScreen()
         }
         m_stack->setCurrentWidget(m_bubbles);
 
+#ifndef Q_OS_SYMBIAN
         gamehelpaction->setText(i18n("Help &with Current Game"));
+#endif
 
         updateActions();
 
@@ -412,6 +497,7 @@ void pWidget::slotShowGameSelectionScreen()
 
 void pWidget::updateActions()
 {
+#ifndef Q_OS_SYMBIAN
     // Enable/disable application actions that aren't appropriate on game
     // selection screen.
     actionCollection()->action( "game_new" )->setEnabled( m_dealer );
@@ -470,10 +556,12 @@ void pWidget::updateActions()
     }
 
     updateGameActionList();
+#endif
 }
 
 void pWidget::updateGameActionList()
 {
+#ifndef Q_OS_SYMBIAN
     guiFactory()->unplugActionList( this, "game_actions" );
 
     dropaction->setEnabled( m_dealer && !m_dealer->autoDrop() );
@@ -495,22 +583,30 @@ void pWidget::updateGameActionList()
             actionList.append( dropaction );
         guiFactory()->plugActionList( this, "game_actions", actionList );
     }
+#endif
 }
 
-void pWidget::toggleDemoAction(bool active) 
+void pWidget::toggleDemoAction(bool active)
 {
+#ifndef Q_OS_SYMBIAN
     demoaction->setChecked( active );
     demoaction->setIcon( KIcon( active ? "media-playback-pause" : "media-playback-start" ) );
+#else
+    Q_UNUSED(active);
+#endif
 }
 
 void pWidget::saveNewToolbarConfig()
 {
+#ifndef Q_OS_SYMBIAN
     KXmlGuiWindow::saveNewToolbarConfig();
     updateGameActionList();
+#endif
 }
 
 void pWidget::closeEvent(QCloseEvent *e)
 {
+#ifndef Q_OS_SYMBIAN
     QFile savedState(KStandardDirs::locateLocal("appdata", saved_state_file));
     if (savedState.exists())
         savedState.remove();
@@ -533,21 +629,31 @@ void pWidget::closeEvent(QCloseEvent *e)
     }
 
     KXmlGuiWindow::closeEvent(e);
+#else
+    Q_UNUSED(e);
+#endif
 }
 
 void pWidget::slotGameInfo(const QString &text)
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage(text, 3000);
+#else
+    Q_UNUSED(text);
+#endif
 }
 
 void pWidget::slotUpdateMoves()
 {
+#ifndef Q_OS_SYMBIAN
     int moves = m_dealer ? m_dealer->getMoves() : 0;
     statusBar()->changeItem( i18np("1 move", "%1 moves", moves), 1 );
+#endif
 }
 
 void pWidget::chooseGame()
 {
+#ifndef Q_OS_SYMBIAN
     QString text = (m_dealer && m_dealer->gameId() == m_freeCellId)
                    ? i18n("Enter a game number (Freecell deals are the same as in the Freecell FAQ):")
                    : i18n("Enter a game number:");
@@ -560,13 +666,17 @@ void pWidget::chooseGame()
 
     if (ok && allowedToStartNewGame())
         startNew(number);
+#endif
 }
 
 void pWidget::gameLost()
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage( i18n( "This game is lost." ) );
+#endif
 }
 
+#ifndef Q_OS_SYMBIAN
 bool pWidget::openGame(const KUrl &url, bool addToRecentFiles)
 {
     QString error;
@@ -662,24 +772,34 @@ void pWidget::showStats()
     dlg.exec();
 }
 
+#endif // Q_OS_SYMBIAN
+
 void pWidget::slotGameSolverWon()
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage(i18n( "This game can still be won! Good luck to you." ));
+#endif
 }
 
 void pWidget::slotGameSolverStart()
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage(i18n( "Calculating..." ) );
+#endif
 }
 
 void pWidget::slotGameSolverLost()
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage(i18n( "Nope, this game cannot be won anymore." ));
+#endif
 }
 
 void pWidget::slotGameSolverUnknown()
 {
+#ifndef Q_OS_SYMBIAN
     statusBar()->showMessage( i18n( "Timeout while playing - unknown if it can be won" ) );
+#endif
 }
 
 void pWidget::slotSnapshot()
@@ -711,5 +831,3 @@ void pWidget::slotSnapshot2()
     if ( m_dealer_it != m_dealer_map.constEnd() )
         QTimer::singleShot( 200, this, SLOT( slotSnapshot() ) );
 }
-
-#include "pwidget.moc"

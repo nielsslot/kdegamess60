@@ -16,8 +16,14 @@
 #include "deck.h"
 #include "patsolve/golf.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 HorRightPile::HorRightPile( int _index, DealerScene* parent)
     : Pile(_index, parent)
@@ -163,10 +169,3 @@ public:
     LocalDealerInfo13() : DealerInfo(I18N_NOOP("Golf"), 12) {}
     virtual DealerScene *createGame() const { return new Golf(); }
 } ldi13;
-
-//-------------------------------------------------------------------------//
-
-#include "golf.moc"
-
-//-------------------------------------------------------------------------//
-

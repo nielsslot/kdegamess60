@@ -27,13 +27,23 @@
 
 #include <QApplication>
 
-#include <kdebug.h>
+#ifndef Q_OS_SYMBIAN
+
 #include <klocale.h>
+#include <kdebug.h>
 #include <kselectaction.h>
 #include <kxmlguiwindow.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <kconfiggroup.h>
+
+#else
+
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+
+#endif
 
 void SpiderPile::moveCards(CardList &c, Pile *to)
 {
@@ -64,8 +74,13 @@ Spider::Spider()
 {
     const qreal dist_x = 11.2;
 
+    // TODO: config for s60?
+#ifndef Q_OS_SYMBIAN
     KConfigGroup cg(KGlobal::config(), settings_group );
     int suits = cg.readEntry( "SpiderSuits", 2);
+#else
+    int suits = 2;
+#endif
 
     Deck::create_deck(this, 2, suits);
 
@@ -122,6 +137,7 @@ Spider::Spider()
     setActions(DealerScene::Hint | DealerScene::Demo | DealerScene::Deal);
     setSolver( new SpiderSolver( this ) );
 
+#ifndef Q_OS_SYMBIAN
     options = new KSelectAction(i18n("Spider &Options"), this );
     KXmlGuiWindow *xmlgui = 0;
 
@@ -149,6 +165,7 @@ Spider::Spider()
     if ( xmlgui )
         xmlgui->guiFactory()->plugActionList( xmlgui, QString::fromLatin1("dealer_options"), actionlist);
     connect( options, SIGNAL( triggered( int ) ), SLOT( gameTypeChanged() ) );
+#endif
 }
 
 void Spider::gameTypeChanged()
@@ -163,10 +180,12 @@ void Spider::gameTypeChanged()
         return;
 
     int suits = 4;
+#ifndef Q_OS_SYMBIAN
     if ( options->currentItem() == 0 )
         suits = 1;
     if ( options->currentItem() == 1 )
         suits = 2;
+#endif
 
     setSuits( suits );
 }
@@ -178,6 +197,8 @@ void Spider::setSuits(int suits)
     Deck::destroy_deck();
     Deck::create_deck(this, 2, suits);
     Deck::deck()->setVisible(false);
+    // TODO config for s60
+#ifndef Q_OS_SYMBIAN
     KConfigGroup cg(KGlobal::config(), settings_group );
     cg.writeEntry( "SpiderSuits", suits);
     cg.sync();
@@ -194,6 +215,7 @@ void Spider::setSuits(int suits)
         options->setCurrentItem( 2 );
         break;
     }
+#endif
     startNew();
 }
 
@@ -414,10 +436,3 @@ void Spider::mapOldId(int id)
        break;
    }
 }
-
-//-------------------------------------------------------------------------//
-
-#include "spider.moc"
-
-//-------------------------------------------------------------------------//
-

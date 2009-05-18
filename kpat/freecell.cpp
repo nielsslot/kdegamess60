@@ -30,8 +30,14 @@
 #include <QTimer>
 #include <QList>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define I18N_NOOP // dummy
+#define kDebug(arg) qDebug()
+#endif
 
 const int CHUNKSIZE = 100;
 
@@ -405,7 +411,3 @@ public:
     LocalDealerInfo3() : DealerInfo(I18N_NOOP("Freecell"), 3) {}
     virtual DealerScene *createGame() const { return new Freecell(); }
 } ldi8;
-
-//-------------------------------------------------------------------------//
-
-#include "freecell.moc"

@@ -17,7 +17,9 @@
 #include <ctime>
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 const unsigned int NumberOfCards = 52;
 

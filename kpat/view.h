@@ -23,7 +23,12 @@
 
 class DealerScene;
 class QWheelEvent;
+
+#ifndef Q_OS_SYMBIAN
 class KXmlGuiWindow;
+#else
+class QMainWindow;
+#endif
 
 class PatienceView: public QGraphicsView
 {
@@ -31,7 +36,11 @@ class PatienceView: public QGraphicsView
 
 public:
 
+#ifndef Q_OS_SYMBIAN
     PatienceView ( KXmlGuiWindow* _window, QWidget* _parent );
+#else
+    PatienceView ( QMainWindow* _window, QWidget* _parent );
+#endif
     virtual ~PatienceView();
 
     static PatienceView *instance();
@@ -39,7 +48,11 @@ public:
     void setScene( QGraphicsScene *scene);
     DealerScene  *dscene() const;
 
+#ifndef Q_OS_SYMBIAN
     KXmlGuiWindow *mainWindow() const;
+#else
+    QMainWindow *mainWindow() const;
+#endif
 
 protected:
 
@@ -50,7 +63,11 @@ protected:
 
     static PatienceView *s_instance;
 
+#ifndef Q_OS_SYMBIAN
     KXmlGuiWindow * m_window;
+#else
+    QMainWindow * m_window;
+#endif
 };
 
 #endif

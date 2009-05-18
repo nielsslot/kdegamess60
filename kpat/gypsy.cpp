@@ -15,7 +15,11 @@
 #include "deck.h"
 #include "patsolve/gypsy.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
+#else
+#define I18N_NOOP // dummy
+#endif
 
 Gypsy::Gypsy( )
     : DealerScene(  )
@@ -92,5 +96,3 @@ public:
     LocalDealerInfo7() : DealerInfo(I18N_NOOP("Gypsy"), 7) {}
     virtual DealerScene *createGame() const { return new Gypsy(); }
 } gyfdi;
-
-#include "gypsy.moc"

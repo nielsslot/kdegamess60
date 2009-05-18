@@ -19,8 +19,12 @@
 
 #include <cassert>
 
+#ifndef Q_OS_SYMBIAN
 #include <klocale.h>
 #include <kdebug.h>
+#else
+#define I18N_NOOP // dummy
+#endif
 
 HorLeftPile::HorLeftPile( int _index, DealerScene* parent)
     : Pile(_index, parent)
@@ -181,10 +185,3 @@ public:
     LocalDealerInfo8() : DealerInfo(I18N_NOOP("Forty & Eight"), 8) {}
     virtual DealerScene *createGame() const { return new Fortyeight(); }
 } ldi9;
-
-//-------------------------------------------------------------------------//
-
-#include "fortyeight.moc"
-
-//-------------------------------------------------------------------------//
-

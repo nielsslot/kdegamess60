@@ -34,6 +34,7 @@
 #include <QtGui/QPainter>
 #include <QtXml/QDomDocument>
 
+#ifndef Q_OS_SYMBIAN
 #include <KTemporaryFile>
 #include <kconfiggroup.h>
 #include <kdebug.h>
@@ -41,6 +42,18 @@
 #include <krandom.h>
 #include <ksharedconfig.h>
 #include <kio/netaccess.h>
+#endif
+
+#ifdef Q_OS_SYMBIAN
+    #include <QDebug>
+    #define kDebug(arg) qDebug()
+    #define i18n // dummy
+    // emulate krandom
+    namespace KRandom
+    {
+        static int random() { return qrand(); }
+    } // namespace KRandom
+#endif
 
 #define DEBUG_HINTS 0
 
@@ -1871,6 +1884,8 @@ bool DealerScene::wasJustSaved() const
 
 void DealerScene::recordGameStatistics()
 {
+    // TODO implement for s60?
+#ifndef Q_OS_SYMBIAN
     // Don't record the game if it was never started, if it is unchanged since
     // it was last saved (allowing the user to close KPat after saving without
     // it recording a loss) or if it has already been recorded.
@@ -1917,6 +1932,7 @@ void DealerScene::recordGameStatistics()
 
         d->_gameRecorded = true;
     }
+#endif
 }
 
 QPointF DealerScene::maxPilePos() const
@@ -2115,6 +2131,7 @@ void DealerScene::drawBackground ( QPainter * painter, const QRectF & rect )
 
 QString DealerScene::save_it()
 {
+#ifndef Q_OS_SYMBIAN
     KTemporaryFile file;
     file.setAutoRemove(false);
     file.open();
@@ -2128,6 +2145,9 @@ QString DealerScene::save_it()
     QString filename = file.fileName();
     file.close();
     return filename;
+#else
+    return QString();
+#endif
 }
 
 void DealerScene::createDump( QPaintDevice *device )
@@ -2174,5 +2194,3 @@ void DealerScene::createDump( QPaintDevice *device )
 }
 
 void DealerScene::mapOldId(int) {}
-
-#include "dealer.moc"

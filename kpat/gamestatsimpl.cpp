@@ -106,5 +106,3 @@ void GameStatsImpl::resetStats()
 
 	setGameType(gameIndex);
 }
-
-#include "gamestatsimpl.moc"

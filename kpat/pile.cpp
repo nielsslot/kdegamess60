@@ -21,7 +21,12 @@
 #include <cassert>
 #include <cmath>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define kDebug(arg) qDebug()
+#endif
 
 
 const int Pile::my_type       = DealerScene::PileTypeId;
@@ -601,5 +606,3 @@ void Pile::tryRelayoutCards()
     else
         m_relayoutTimer->start( 40 );
 }
-
-#include "pile.moc"
