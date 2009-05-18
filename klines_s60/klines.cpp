@@ -25,6 +25,9 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QCoreApplication>
+#include <QDesktopWidget>
+
+#include "saboutdialog.h"
 
 #include "mwidget.h"
 
@@ -79,6 +82,9 @@ void KLinesMainWindow::setupActions()
     mwidget->setShowNextColors(false); // TODO read from app settings
     connect(m_actShowNext, SIGNAL(triggered(bool)), SLOT(showNextToggled(bool)));
 
+    QAction *actAbout = new QAction("About", this);
+    connect( actAbout, SIGNAL(triggered(bool)), SLOT(showAboutDialog()) );
+
     QAction *actQuit = new QAction("Quit", this);
     connect( actQuit, SIGNAL(triggered(bool)), qApp, SLOT(quit()) );
 
@@ -86,6 +92,7 @@ void KLinesMainWindow::setupActions()
     menuBar()->addAction(actUndo);
     menuBar()->addAction(actEndTurn);
     menuBar()->addAction(m_actShowNext);
+    menuBar()->addAction(actAbout);
     menuBar()->addAction(actQuit);
 
   /* TODO
@@ -120,6 +127,29 @@ void KLinesMainWindow::viewHighScore()
    d.setConfigGroup( "Highscore" );
    d.exec();
    */
+}
+
+void KLinesMainWindow::showAboutDialog()
+{
+    SAboutDialog dlg(this);
+    dlg.setAppNameAndVersion("KLines", "1.5-s60" );
+    dlg.addAuthor("Dmitry Suzdalev", "Current maintainer", "dimsuz@gmail.com");
+    dlg.addAuthor("Dmitry Suzdalev1", "Port to graphics view and symbian OS. Current maintainer", "dimsuz@gmail.com");
+    dlg.addAuthor("Dmitry Suzdalev1", "Port to graphics view and symbian OS. Current maintainer", "dimsuz@gmail.com");
+    dlg.addAuthor("Dmitry Suzdalev1", "Current maintainer", "dimsuz@gmail.com");
+    dlg.addAuthor("Dmitry Suzdalev1", "Current maintainer", "dimsuz@gmail.com");
+    dlg.addAuthor("Dmitry Suzdalev1", "Current maintainer", "dimsuz@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+    dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
+
+    QDesktopWidget desktop;
+    dlg.resize( desktop.availableGeometry().width(), desktop.availableGeometry().height()/2 );
+
+    dlg.exec();
 }
 
 void KLinesMainWindow::startGame()

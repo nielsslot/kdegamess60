@@ -34,6 +34,7 @@ protected:
 
 public Q_SLOTS:
     void startGame();
+
 private Q_SLOTS:
     void viewHighScore();
     void updateScore(int score);
@@ -41,6 +42,8 @@ private Q_SLOTS:
     void showNextToggled(bool show);
     void configureSettings();
     void loadSettings();
+    void showAboutDialog();
+
 private:
     MainWidget *mwidget;
     QAction *m_actShowNext;

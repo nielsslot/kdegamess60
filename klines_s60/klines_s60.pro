@@ -12,6 +12,7 @@ HEADERS += kgamepopupitem.h \
     scene.h \
     renderer.h \
     animator.h \
+    saboutdialog.h \
     ballitem.h
 SOURCES += kgamepopupitem.cpp \
     previewitem.cpp \
@@ -23,10 +24,11 @@ SOURCES += kgamepopupitem.cpp \
     scene.cpp \
     renderer.cpp \
     animator.cpp \
+    saboutdialog.cpp \
     ballitem.cpp
-FORMS += klines_s60.ui
+
 RESOURCES += klines.qrc
-symbian { 
+symbian {
     TARGET.UID3 = 0xE41D776F
     ICON = klines.png
 }
