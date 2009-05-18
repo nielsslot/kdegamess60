@@ -8,7 +8,7 @@ DEPENDPATH += . ../patsolve
 INCLUDEPATH += /home/archuser/src/kdegamess60/kpat/. . ../patsolve
 DEFINES += Q_OS_SYMBIAN
 QT += gui svg xml
-LIBS += -lpatsolve
+LIBS += -L../patsolve -lpatsolve
 
 # Input
 HEADERS += card.h \

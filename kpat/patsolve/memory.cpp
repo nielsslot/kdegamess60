@@ -6,7 +6,9 @@
 
 #include <QtGlobal>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 #define BLOCKSIZE (32 * 4096)
 

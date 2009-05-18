@@ -1,9 +1,9 @@
 /* Common routines & arrays. */
 
 #include "spider.h"
-#include "../spider.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/spider.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -13,7 +13,12 @@
 #include <sys/types.h>
 #include <cstdarg>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define kDebug(arg) qDebug()
+#endif
 
 /* These two routines make and unmake moves. */
 

@@ -1,9 +1,9 @@
 /* Common routines & arrays. */
 
 #include "klondike.h"
-#include "../klondike.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/klondike.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -13,7 +13,9 @@
 #include <sys/types.h>
 #include <cstdarg>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 /* Some macros used in get_possible_moves(). */
 

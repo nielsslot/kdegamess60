@@ -1,8 +1,8 @@
 /* Common routines & arrays. */
 
 #include "freecell.h"
-#include "../freecell.h"
-#include "../pile.h"
+#include "../app/freecell.h"
+#include "../app/pile.h"
 
 #include <cstdio>
 #include <cstdlib>

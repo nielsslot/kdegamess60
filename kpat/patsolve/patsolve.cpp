@@ -1,7 +1,7 @@
 /* Common routines & arrays. */
 
 #include "patsolve.h"
-#include "../pile.h"
+#include "../app/pile.h"
 #include "memory.h"
 
 #include <cstdio>
@@ -12,7 +12,12 @@
 #include <cstdarg>
 #include <sys/types.h>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#else
+#include <QDebug>
+#define kDebug(arg) qDebug()
+#endif
 
 long all_moves = 0;
 

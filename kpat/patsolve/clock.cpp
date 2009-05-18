@@ -13,7 +13,9 @@
 #include <sys/types.h>
 #include <cstdarg>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 /* These two routines make and unmake moves. */
 

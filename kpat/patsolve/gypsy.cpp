@@ -1,9 +1,9 @@
  /* Common routines & arrays. */
 
 #include "gypsy.h"
-#include "../gypsy.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/gypsy.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -14,7 +14,9 @@
 #include <cstdarg>
 #include <algorithm>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 /* These two routines make and unmake moves. */
 

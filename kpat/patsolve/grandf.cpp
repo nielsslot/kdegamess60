@@ -1,9 +1,9 @@
 /* Common routines & arrays. */
 
 #include "grandf.h"
-#include "../grandf.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/grandf.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -13,7 +13,9 @@
 #include <sys/types.h>
 #include <cstdarg>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 /* These two routines make and unmake moves. */
 
@@ -324,7 +326,7 @@ int GrandfSolver::get_possible_moves(int *a, int *numout)
                 printcard( *Wp[j], stderr );
                 fprintf( stderr, " allowed %d\n",allowed );
 #endif
-                if ( allowed ) 
+                if ( allowed )
 		{
                     mp->card_index = l;
                     mp->from = i;

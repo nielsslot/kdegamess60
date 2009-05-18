@@ -1,9 +1,9 @@
 /* Common routines & arrays. */
 
 #include "golf.h"
-#include "../golf.h"
-#include "../pile.h"
-#include "../deck.h"
+#include "../app/golf.h"
+#include "../app/pile.h"
+#include "../app/deck.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -13,7 +13,9 @@
 #include <sys/types.h>
 #include <cstdarg>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 #define PRINT 0
 #define PRINT2 0
