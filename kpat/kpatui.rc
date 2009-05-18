@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gui name="kpat"
+     version="25"
+     xmlns="http://www.kde.org/standards/kxmlgui/1.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
+                         http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
+<MenuBar>
+  <Menu name="game">
+    <Action name="choose_game"/>
+    <Action name="game_stats"/>
+  </Menu>
+  <Menu name="move" NoMerge="true">
+    <Action name="move_undo"/>
+    <Action name="move_redo"/>
+    <Separator/>
+    <ActionList name="game_actions"/>
+  </Menu>
+  <Menu name="settings">
+    <Action name="change_game_type"/>
+    <ActionList name="dealer_options"/>
+    <Separator/>
+    <Action name="select_deck"/>
+    <Action name="enable_autodrop"/>
+    <Action name="enable_solver"/>
+    <Action name="remember_state"/>
+  </Menu>
+  <Menu name="help">
+    <Action name="help_game"/>
+  </Menu>
+</MenuBar>
+<ToolBar name="mainToolBar"><text>Main Toolbar</text>
+  <Action name="game_new"/>
+  <Action name="move_undo"/>
+  <Separator/>
+  <ActionList name="game_actions"/>
+</ToolBar>
+</gui>
