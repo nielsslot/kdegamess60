@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG += staticlib
-DEFINES += Q_OS_SYMBIAN
 QT += svg gui
+#DEFINES += Q_OS_SYMBIAN
 
 HEADERS += clock.h \
            fortyeight.h \
