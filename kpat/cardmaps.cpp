@@ -22,7 +22,11 @@
 #include "version.h"
 #include "view.h"
 #include "dealer.h"
+
+#ifndef Q_OS_SYMBIAN
 #include "ksvgrenderer.h"
+#endif
+
 #include "card.h"
 #include "cardcache.h"
 #include "speeds.h"
@@ -46,15 +50,20 @@
 #include <QPixmap>
 #include <QDir>
 
+#ifndef Q_OS_SYMBIAN
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <krandom.h>
-#include <carddeckinfo.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
+#include <carddeckinfo.h>
+#else
+#include "carddeckinfo.h"
+#endif
+
 
 cardMap *cardMap::_self = 0;
 
@@ -86,12 +95,20 @@ cardMap::cardMap() : QObject()
     d = new cardMapPrivate();
 
     Q_ASSERT(!_self);
+#ifndef Q_OS_SYMBIAN
     kDebug(11111) << "cardMap\n";
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup cs(config, settings_group );
+#endif
 
+#ifndef Q_OS_SYMBIAN
     updateTheme(cs);
     setWantedCardWidth( cs.readEntry( "CardWidth", 100 ) );
+#else
+    updateTheme();
+    // TODO read setting from some config file
+    setWantedCardWidth( 100 );
+#endif
     suits[AbstractCard::Clubs] = KCardInfo::Club;
     suits[AbstractCard::Spades] = KCardInfo::Spade;
     suits[AbstractCard::Diamonds] = KCardInfo::Diamond;
@@ -112,10 +129,21 @@ cardMap::cardMap() : QObject()
     _self = this;
 }
 
+#ifndef Q_OS_SYMBIAN
 void cardMap::updateTheme(const KConfigGroup &cs)
+#else
+void cardMap::updateTheme()
+#endif
 {
+
+#ifndef Q_OS_SYMBIAN
     QString fronttheme = CardDeckInfo::frontTheme( cs );
     QString backtheme = CardDeckInfo::backTheme( cs );
+#else
+    QString fronttheme = "default";
+    QString backtheme = "default";
+#endif
+
     Q_ASSERT ( !backtheme.isEmpty() );
     Q_ASSERT ( !fronttheme.isEmpty() );
 
@@ -159,10 +187,13 @@ double cardMap::wantedCardWidth() const
 
 void cardMap::triggerRescale()
 {
+    // TODO save settings to some config file on s60?
+#ifndef Q_OS_SYMBIAN
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup cs(config, settings_group );
     cs.writeEntry( "CardWidth", d->_wantedCardWidth );
     config->sync();
+#endif
     if ( PatienceView::instance() && PatienceView::instance()->dscene() )
          PatienceView::instance()->dscene()->rescale(false);
 }
@@ -176,7 +207,9 @@ void cardMap::setWantedCardWidth( double w )
         return;
 
     d->m_body = QRect();
+#ifndef Q_OS_SYMBIAN
     kDebug(11111) << "setWantedCardWidth" << w << d->_wantedCardWidth;
+#endif
     d->_wantedCardWidth = w;
     d->_scale = 0;
     d->m_cache.setSize( QSize( wantedCardWidth(), wantedCardHeight() ) );
@@ -188,7 +221,7 @@ void cardMap::setWantedCardWidth( double w )
     }
 }
 
-cardMap *cardMap::self() 
+cardMap *cardMap::self()
 {
     assert(_self);
     return _self;
@@ -207,5 +240,3 @@ QPixmap cardMap::renderFrontside( AbstractCard::Rank r, AbstractCard::Suit s )
     QPixmap pix = d->m_cache.frontside( KCardInfo( suits[s], ranks[r] ) );
     return pix;
 }
-
-#include "cardmaps.moc"

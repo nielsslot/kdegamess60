@@ -107,4 +107,3 @@ public:
     virtual DealerScene *createGame() const { return new Clock(); }
 } gfi11;
 
-#include "clock.moc"

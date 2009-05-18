@@ -47,7 +47,11 @@ public:
     QPixmap renderFrontside( Card::Rank, Card::Suit );
     QRect opaqueRect() const;
 
+#ifndef Q_OS_SYMBIAN
     void updateTheme(const KConfigGroup &cg);
+#else
+    void updateTheme();
+#endif
 
 public slots:
     void triggerRescale();

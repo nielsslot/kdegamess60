@@ -37,7 +37,9 @@
 #include <QGraphicsSvgItem>
 #include <QPixmapCache>
 
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 
 // Run time type id
@@ -656,5 +658,3 @@ QString gettime()
         gettimeofday( &tv2, 0 );
     return QString::number( ( tv.tv_sec - tv2.tv_sec ) * 1000 + ( tv.tv_usec -tv2.tv_usec ) / 1000 );
 }
-
-#include "card.moc"

@@ -19,7 +19,9 @@
 
 #include <QGraphicsScene>
 
+#ifndef Q_OS_SYMBIAN
 #include <krandomsequence.h>
+#endif
 
 class MoveHint;
 class QDomDocument;
@@ -231,7 +233,9 @@ private slots:
 protected:
     PileList piles;
     QList<MoveHint*> hints;
+#ifndef Q_OS_SYMBIAN
     KRandomSequence randseq;
+#endif
 
     virtual void newDemoMove(Card *m);
     void considerGameStarted();
