@@ -49,11 +49,11 @@ MainWindow::MainWindow()
 
     setupActions();
 
+#ifndef Q_OS_SYMBIAN
     QLayout* l = layout();
     Q_ASSERT(l);
     l->setSizeConstraint(QLayout::SetFixedSize);
 
-#ifndef Q_OS_SYMBIAN
     // setup status bar
     KStatusBar* bar = statusBar();
     Q_ASSERT(bar);
@@ -83,6 +83,10 @@ MainWindow::MainWindow()
     KGameDifficulty::addStandardLevel(KGameDifficulty::Medium);
     KGameDifficulty::addStandardLevel(KGameDifficulty::Hard);
     KGameDifficulty::setLevel(KGameDifficulty::standardLevel(KollisionConfig::gameDifficulty()));
+#endif
+    
+#ifdef Q_OS_SYMBIAN
+    setMinimumSize(m_main->sceneRect().size().toSize());
 #endif
 }
 

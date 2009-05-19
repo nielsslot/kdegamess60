@@ -41,6 +41,7 @@
 #include <QDebug>
 #include <QtGlobal>
 #include <QDesktopWidget>
+#include <time.h>
 #define i18n // dummy
 // quick'n'dirty
 #define i18np(arg1,arg2,arg3) QString(arg2).arg(arg3)
@@ -64,17 +65,16 @@ MainArea::MainArea()
 , m_lmbPressed(false)
 #endif
 {
-//#ifndef Q_OS_SYMBIAN
+#ifndef Q_OS_SYMBIAN
     m_sizeX = 500;
     m_sizeY = 500;
-    /*
 #else
     QDesktopWidget desktop;
     QRect r = desktop.availableGeometry();
     m_sizeX = r.width();
     m_sizeY = r.height();
 #endif
-*/
+    
     QRect rect(0, 0, m_sizeX, m_sizeY);
     setSceneRect(rect);
 

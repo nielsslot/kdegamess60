@@ -7,6 +7,9 @@
   (at your option) any later version.
 */
 
+// for Q_OS_SYMBIAN
+#include <QtGlobal>
+
 #ifndef Q_OS_SYMBIAN
 #include <KApplication>
 #include <KAboutData>

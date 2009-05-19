@@ -10,6 +10,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// for Q_OS_SYMBIAN
+#include <QtGlobal>
+
 #ifndef Q_OS_SYMBIAN
 
 #include <KGameDifficulty>
