@@ -60,16 +60,21 @@ MainArea::MainArea()
 , m_paused(false)
 , m_pause_time(0)
 , m_penalty(0)
+#ifdef Q_OS_SYMBIAN
+, m_lmbPressed(false)
+#endif
 {
-#ifndef Q_OS_SYMBIAN
+//#ifndef Q_OS_SYMBIAN
     m_sizeX = 500;
     m_sizeY = 500;
+    /*
 #else
     QDesktopWidget desktop;
     QRect r = desktop.availableGeometry();
     m_sizeX = r.width();
     m_sizeY = r.height();
 #endif
+*/
     QRect rect(0, 0, m_sizeX, m_sizeY);
     setSceneRect(rect);
 
@@ -381,9 +386,13 @@ void MainArea::abort()
 
 void MainArea::tick()
 {
+    // in s60 version position is set only when lmb is pressed
+    // see mouse*Event()'s
+#ifndef Q_OS_SYMBIAN
     if (!m_death && m_man && !m_paused) {
         setManPosition(views().first()->mapFromGlobal(QCursor().pos()));
     }
+#endif
 
     int t = m_time.elapsed() - m_last_time;
     m_last_time = m_time.elapsed();
@@ -581,8 +590,25 @@ void MainArea::mousePressEvent(QGraphicsSceneMouseEvent* e)
             start();
             emit changeState(true);
         }
+#ifdef Q_OS_SYMBIAN
+        m_lmbPressed = true;
+#endif
     }
 }
+
+#ifdef Q_OS_SYMBIAN
+void MainArea::mouseMoveEvent(QGraphicsSceneMouseEvent* e)
+{
+    if (m_lmbPressed) {
+        setManPosition(e->scenePos());
+    }
+}
+
+void MainArea::mouseReleaseEvent(QGraphicsSceneMouseEvent*)
+{
+    m_lmbPressed = false;
+}
+#endif
 
 void MainArea::focusOutEvent(QFocusEvent*)
 {

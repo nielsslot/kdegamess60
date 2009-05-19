@@ -59,6 +59,11 @@ Q_OBJECT
     int m_pause_time;
     int m_penalty;
 
+    // on s60 we track player ball movements when player presses button (taps the screen)
+#ifdef Q_OS_SYMBIAN
+    bool m_lmbPressed;
+#endif
+
     QList<MessagePtr> m_welcome_msg;
     QList<MessagePtr> m_pause_msg;
 
@@ -87,6 +92,10 @@ Q_OBJECT
 #endif
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+#ifdef Q_OS_SYMBIAN
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*);
+#endif
     virtual void focusOutEvent(QFocusEvent*);
 public:
     MainArea();
