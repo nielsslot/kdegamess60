@@ -1,22 +1,27 @@
 /*
   Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
-            
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 */
 
+#ifndef Q_OS_SYMBIAN
 #include <KApplication>
 #include <KAboutData>
 #include <KLocale>
 #include <KCmdLineArgs>
+#else
+#include <QApplication>
+#endif
 
 #include "mainwindow.h"
 
 
 int main(int argc, char *argv[])
 {
+#ifndef Q_OS_SYMBIAN
     KAboutData aboutData("kollision", 0, ki18n("Kollision"),
                          "0.1", ki18n("KDE collision game"), KAboutData::License_GPL,
                          ki18n("(c) 2007 Paolo Capriotti"), KLocalizedString(), "http://games.kde.org/kollision");
@@ -30,9 +35,13 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
     KGlobal::locale()->insertCatalog("libkdegames");
+#else
+    // TODO add about dialog for s60
+    QApplication app(argc, argv);
+#endif
 
     MainWindow* window = new MainWindow;
     window->show();
-    
+
     return app.exec();
 }

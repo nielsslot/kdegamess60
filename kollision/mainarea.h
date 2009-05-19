@@ -14,7 +14,9 @@
 #include <QTime>
 #include <QList>
 #include <QGraphicsScene>
+#ifndef Q_OS_SYMBIAN
 #include "audioplayer.h"
+#endif
 #include "animator.h"
 #include "message.h"
 
@@ -59,7 +61,10 @@ Q_OBJECT
     QList<MessagePtr> m_welcome_msg;
     QList<MessagePtr> m_pause_msg;
 
+    // no audio yet
+#ifndef Q_OS_SYMBIAN
     AudioPlayer m_player;
+#endif
 
     double radius() const;
     QPointF randomPoint() const;
@@ -76,7 +81,9 @@ Q_OBJECT
     void onDeath();
     void setManPosition(const QPointF& p);
     void drawBackground(QPainter*, const QRectF&);
+#ifndef Q_OS_SYMBIAN
     void updateSounds();
+#endif
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
     virtual void focusOutEvent(QFocusEvent*);
@@ -86,7 +93,9 @@ public:
     void start();
 public slots:
     void tick();
+#ifndef Q_OS_SYMBIAN
     void enableSounds(bool enable);
+#endif
     void abort();
     void togglePause();
 signals:

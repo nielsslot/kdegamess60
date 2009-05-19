@@ -1,6 +1,6 @@
 /*
   Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
-            
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -12,7 +12,10 @@
 #include "sprite.h"
 
 #include <math.h>
+
+#ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
+#endif
 
 Animation::~Animation()
 {
@@ -68,7 +71,7 @@ void FadeAnimation::stop()
 }
 
 
-MovementAnimation::MovementAnimation(const SpritePtr& sprite, const QPointF& from, 
+MovementAnimation::MovementAnimation(const SpritePtr& sprite, const QPointF& from,
                                      const QPointF& velocity, int time)
 : m_sprite(sprite)
 , m_from(from)
@@ -132,7 +135,7 @@ bool AnimationGroup::step(int t)
             ++it;
         }
     }
-    
+
     return m_animations.isEmpty();
 }
 
@@ -191,6 +194,3 @@ void AnimationSequence::stop()
         delete m_animations.dequeue();
     }
 }
-
-#include "animation.moc"
-

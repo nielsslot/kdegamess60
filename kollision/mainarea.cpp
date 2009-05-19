@@ -14,20 +14,37 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 
+#ifndef Q_OS_SYMBIAN
 #include <KDebug>
 #include <KGameDifficulty>
 #include <KLocalizedString>
 #include <Phonon/MediaObject>
+#endif
 
 #include "renderer.h"
 #include "ball.h"
+
+#ifndef Q_OS_SYMBIAN
 #include "kollisionconfig.h"
+#endif
 
 // for rand
 #include <math.h>
 #include <stdio.h>
+
+#ifndef Q_OS_SYMBIAN
 #include <time.h>
 #include <sys/time.h>
+#endif
+
+#ifdef Q_OS_SYMBIAN
+#include <QDebug>
+#include <QtGlobal>
+#define i18n // dummy
+// quick'n'dirty
+#define i18np(arg1,arg2,arg3) QString(arg2).arg(arg3)
+#define kDebug qDebug
+#endif
 
 struct Collision
 {
@@ -71,8 +88,10 @@ MainArea::MainArea()
 
     writeText(i18n("Welcome to Kollision\nClick to start a game"), false);
 
+#ifndef Q_OS_SYMBIAN
     // setup audio player
     updateSounds();
+#endif
 }
 
 MainArea::~MainArea()
@@ -80,6 +99,7 @@ MainArea::~MainArea()
     delete m_renderer;
 }
 
+#ifndef Q_OS_SYMBIAN
 void MainArea::enableSounds(bool enable)
 {
     KollisionConfig::setEnableSounds(enable);
@@ -91,6 +111,7 @@ void MainArea::updateSounds()
 {
     m_player.setActive(KollisionConfig::enableSounds());
 }
+#endif
 
 Animation* MainArea::writeMessage(const QString& text)
 {
@@ -210,6 +231,7 @@ void MainArea::start()
     m_death = false;
     m_game_over = false;
 
+#ifndef Q_OS_SYMBIAN
     kDebug() << "difficulty:" << KollisionConfig::gameDifficulty();
 
     switch (KollisionConfig::gameDifficulty()) {
@@ -224,6 +246,10 @@ void MainArea::start()
         m_ball_timeout = 20;
         break;
     }
+#else
+    // TODO: using Easy by default
+    m_ball_timeout = 30;
+#endif
 
     m_welcome_msg.clear();
 
@@ -244,19 +270,21 @@ void MainArea::start()
 
     emit changeGameTime(0);
     emit starting();
+#ifndef Q_OS_SYMBIAN
     m_player.play(AudioPlayer::START);
+#endif
 }
 
 QPointF MainArea::randomPoint() const
 {
-    double x = (double)rand() * (m_size - radius() * 2) / RAND_MAX + radius();
-    double y = (double)rand() * (m_size - radius() * 2) / RAND_MAX + radius();
+    double x = (double)qrand() * (m_size - radius() * 2) / RAND_MAX + radius();
+    double y = (double)qrand() * (m_size - radius() * 2) / RAND_MAX + radius();
     return QPointF(x, y);
 }
 
 QPointF MainArea::randomDirection(double val) const
 {
-    double angle = (double)rand() * 2 * M_PI / RAND_MAX;
+    double angle = (double)qrand() * 2 * M_PI / RAND_MAX;
     return QPointF(val * sin(angle), val * cos(angle));
 }
 
@@ -282,6 +310,7 @@ Ball* MainArea::addBall(const QString& id)
 
     // speed depends of game difficulty
     double speed;
+#ifndef Q_OS_SYMBIAN
     switch (KollisionConfig::gameDifficulty())
     {
     case KGameDifficulty::Easy:
@@ -295,6 +324,10 @@ Ball* MainArea::addBall(const QString& id)
         speed = 0.4;
         break;
     }
+#else
+    // TODO defaulting to Easy speed
+    speed = 0.2;
+#endif
     ball->setVelocity(randomDirection(speed));
 
     ball->setOpacityF(0.0);
@@ -373,7 +406,9 @@ void MainArea::tick()
                 ball->position(),
                 m_man->position(),
                 radius() * 2, collision)) {
+#ifndef Q_OS_SYMBIAN
             m_player.play(AudioPlayer::YOU_LOSE);
+#endif
             abort();
             break;
         }
@@ -422,9 +457,11 @@ void MainArea::tick()
                 hit_wall = true;
             }
         }
+#ifndef Q_OS_SYMBIAN
         if (hit_wall) {
             m_player.play(AudioPlayer::HIT_WALL);
         }
+#endif
 
         // handle collisions with next balls
         for (int j = i + 1; j < m_balls.size(); j++) {
@@ -471,7 +508,9 @@ void MainArea::tick()
         QPointF pos = ball->position();
 
         if (m_death && pos.y() >= height() + radius() + 10) {
+#ifndef Q_OS_SYMBIAN
             m_player.play(AudioPlayer::BALL_LEAVING);
+#endif
             delete ball;
             it = m_balls.erase(it);
         }

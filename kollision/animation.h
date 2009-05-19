@@ -1,6 +1,6 @@
 /*
   Copyright (c) 2007 Paolo Capriotti <p.capriotti@gmail.com>
-            
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
@@ -14,14 +14,20 @@
 #include <QList>
 #include <QQueue>
 #include <QObject>
+
+
+#ifndef Q_OS_SYMBIAN
 #include "spritefwd.h"
+#else
+#include "sprite.h"
+#endif
 
 class Animation : public QObject
 {
 Q_OBJECT
 public:
     virtual ~Animation();
-    
+
     virtual void start(int t) = 0;
     virtual bool step(int t) = 0;
 public slots:
@@ -37,7 +43,7 @@ Q_OBJECT
     int m_start;
 public:
     PauseAnimation(int time);
-    
+
     virtual void start(int t);
     virtual bool step(int t);
     virtual void stop() { }
@@ -51,11 +57,11 @@ Q_OBJECT
     double m_to;
     int m_time;
     int m_start;
-    
+
     bool m_stopped;
 public:
     FadeAnimation(const SpritePtr& sprite, double from, double to, int time);
-    
+
     virtual void start(int t);
     virtual bool step(int t);
     virtual void stop();
@@ -70,9 +76,9 @@ Q_OBJECT
     int m_time;
     int m_last;
 public:
-    MovementAnimation(const SpritePtr& sprite, const QPointF& from, 
+    MovementAnimation(const SpritePtr& sprite, const QPointF& from,
                       const QPointF& velocity, int time);
-    
+
     virtual void start(int t);
     virtual bool step(int t);
     virtual void stop();
@@ -87,9 +93,9 @@ Q_OBJECT
     int m_last;
 public:
     AnimationGroup();
-    
+
     void add(Animation* animation);
-    
+
     virtual void start(int t);
     virtual bool step(int t);
     virtual void stop();
@@ -102,9 +108,9 @@ Q_OBJECT
     int m_last;
 public:
     AnimationSequence();
-    
+
     void add(Animation* animation);
-    
+
     virtual void start(int t);
     virtual bool step(int t);
     virtual void stop();
