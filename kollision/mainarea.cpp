@@ -40,6 +40,7 @@
 #ifdef Q_OS_SYMBIAN
 #include <QDebug>
 #include <QtGlobal>
+#include <QDesktopWidget>
 #define i18n // dummy
 // quick'n'dirty
 #define i18np(arg1,arg2,arg3) QString(arg2).arg(arg3)
@@ -60,8 +61,16 @@ MainArea::MainArea()
 , m_pause_time(0)
 , m_penalty(0)
 {
-    m_size = 500;
-    QRect rect(0, 0, m_size, m_size);
+#ifndef Q_OS_SYMBIAN
+    m_sizeX = 500;
+    m_sizeY = 500;
+#else
+    QDesktopWidget desktop;
+    QRect r = desktop.availableGeometry();
+    m_sizeX = r.width();
+    m_sizeY = r.height();
+#endif
+    QRect rect(0, 0, m_sizeX, m_sizeY);
     setSceneRect(rect);
 
     srand(time(0));
@@ -116,7 +125,7 @@ void MainArea::updateSounds()
 Animation* MainArea::writeMessage(const QString& text)
 {
     Message* message = new Message(text, m_msg_font);
-    message->setPosition(QPointF(m_size, m_size) / 2.0);
+    message->setPosition(QPointF(m_sizeX, m_sizeY) / 2.0);
     addItem(message);
     message->setOpacityF(0.0);
 
@@ -168,7 +177,7 @@ Animation* MainArea::writeText(const QString& text, bool fade)
 void MainArea::displayMessages(const QList<KSharedPtr<Message> >& messages)
 {
     const int step = 45;
-    QPointF pos(m_size / 2.0, (m_size - step * messages.size()) / 2.0);
+    QPointF pos(m_sizeX / 2.0, (m_sizeY - step * messages.size()) / 2.0);
 
     for (int i = 0; i < messages.size(); i++) {
         KSharedPtr<Message> msg = messages[i];
@@ -277,8 +286,8 @@ void MainArea::start()
 
 QPointF MainArea::randomPoint() const
 {
-    double x = (double)qrand() * (m_size - radius() * 2) / RAND_MAX + radius();
-    double y = (double)qrand() * (m_size - radius() * 2) / RAND_MAX + radius();
+    double x = (double)qrand() * (m_sizeX - radius() * 2) / RAND_MAX + radius();
+    double y = (double)qrand() * (m_sizeY - radius() * 2) / RAND_MAX + radius();
     return QPointF(x, y);
 }
 
@@ -440,9 +449,9 @@ void MainArea::tick()
             pos.setX(2 * radius() - pos.x());
             hit_wall = true;
         }
-        if (pos.x() >= m_size - radius()) {
+        if (pos.x() >= m_sizeX - radius()) {
             vel.setX(-fabs(vel.x()));
-            pos.setX(2 * (m_size - radius()) - pos.x());
+            pos.setX(2 * (m_sizeX - radius()) - pos.x());
             hit_wall = true;
         }
         if (pos.y() <= radius()) {
@@ -451,9 +460,9 @@ void MainArea::tick()
             hit_wall = true;
         }
         if (!m_death) {
-            if (pos.y() >= m_size - radius()) {
+            if (pos.y() >= m_sizeY - radius()) {
                 vel.setY(-fabs(vel.y()));
-                pos.setY(2 * (m_size - radius()) - pos.y());
+                pos.setY(2 * (m_sizeY - radius()) - pos.y());
                 hit_wall = true;
             }
         }
@@ -549,9 +558,9 @@ void MainArea::setManPosition(const QPointF& p)
     QPointF pos = p;
 
     if (pos.x() <= radius()) pos.setX((int) radius());
-    if (pos.x() >= m_size - radius()) pos.setX(m_size - (int) radius());
+    if (pos.x() >= m_sizeX - radius()) pos.setX(m_sizeX - (int) radius());
     if (pos.y() <= radius()) pos.setY((int) radius());
-    if (pos.y() >= m_size - radius()) pos.setY(m_size - (int) radius());
+    if (pos.y() >= m_sizeY - radius()) pos.setY(m_sizeY - (int) radius());
 
     m_man->setPosition(pos);
 }

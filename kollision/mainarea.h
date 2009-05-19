@@ -38,7 +38,8 @@ Q_OBJECT
     /// time interval between two balls being added
     int m_ball_timeout;
 
-    int m_size;
+    int m_sizeX;
+    int m_sizeY;
     Renderer* m_renderer;
     QPixmap m_background;
     Animator m_animator;
