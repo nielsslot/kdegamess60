@@ -23,7 +23,7 @@
 #include "view.h"
 #include "speeds.h"
 #include "deck.h"
-#include "patsolve/spider.h"
+#include "../patsolve/spider.h"
 
 #include <QApplication>
 

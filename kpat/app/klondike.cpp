@@ -26,10 +26,8 @@
 #include "version.h"
 #include "deck.h"
 #include "cardmaps.h"
-#include "patsolve/klondike.h"
+#include "../patsolve/klondike.h"
 #include "view.h"
-
-#include <cassert>
 
 #include <QApplication>
 

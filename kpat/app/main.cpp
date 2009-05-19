@@ -19,11 +19,8 @@
 #include "version.h"
 #include "pwidget.h"
 #include "dealer.h"
-#include "patsolve/patsolve.h"
+#include "../patsolve/patsolve.h"
 #include "cardmaps.h"
-
-#include <cstdio>
-#include <climits>
 
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
@@ -43,6 +40,12 @@
 #else
 #include <QApplication>
 #include <QDebug>
+
+#include <eikenv.h>
+#include <eikappui.h>
+#include <aknenv.h>
+#include <aknappui.h>
+
 #define kError qDebug
 #define i18n // dummy
 #endif
@@ -180,6 +183,10 @@ int main( int argc, char **argv )
     KApplication application;
 #else
     QApplication application(argc, argv);
+    CAknAppUi* appUi = dynamic_cast<CAknAppUi*>(CEikonEnv::Static()->AppUi());
+    if(appUi) {
+        appUi->SetOrientationL(CAknAppUi::EAppUiOrientationLandscape);
+    }
 #endif
 
 #ifndef Q_OS_SYMBIAN

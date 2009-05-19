@@ -14,9 +14,7 @@
 
 #include "yukon.h"
 #include "deck.h"
-#include "patsolve/yukon.h"
-
-#include <cassert>
+#include "../patsolve/yukon.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

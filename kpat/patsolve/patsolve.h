@@ -2,9 +2,9 @@
 #define PATSOLVE_H
 
 #include "../app/hint.h"
-#include "memory.h"
+#include "../patsolve/memory.h"
 
-#include <cstdio>
+#include <stdio.h>
 
 #include <QMap>
 

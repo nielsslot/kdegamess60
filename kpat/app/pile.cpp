@@ -18,14 +18,12 @@
 #include "deck.h"
 #include "render.h"
 
-#include <cassert>
-#include <cmath>
-
 #ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
 #else
 #include <QDebug>
 #define kDebug(arg) qDebug()
+#include <math.h>
 #endif
 
 
@@ -268,7 +266,7 @@ void Pile::setVisible(bool vis)
 
 int Pile::indexOf(const Card *c) const
 {
-    assert(c->source() == this);
+    Q_ASSERT(c->source() == this);
     return m_cards.indexOf(const_cast<Card*>(c)); // the list is of non-const cards
 }
 
@@ -311,8 +309,8 @@ void Pile::relayoutCards()
     {
         //kDebug(11111) << ( *it )->name() << " " << ( *it )->spread();
         // the spreads should hopefully have all one sign, or we get in trouble
-        preferredSize.rwidth() += fabs( ( *it )->spread().width() );
-        preferredSize.rheight() += fabs( ( *it )->spread().height() );
+        preferredSize.rwidth() += qAbs( ( *it )->spread().width() );
+        preferredSize.rheight() += qAbs( ( *it )->spread().height() );
         if ( ( *it )->animated() || dscene()->isMoving( *it ) ) {
             // kDebug(11111) << ( *it )->name() << "is animated - restarting timer\n";
             tryRelayoutCards();
@@ -365,7 +363,7 @@ void Pile::add( Card *_card, int index)
     else {
         while (m_cards.count() <= index)
             m_cards.append(0);
-        assert(m_cards[index] == 0);
+        Q_ASSERT(m_cards[index] == 0);
         m_cards[index] = _card;
     }
 
@@ -462,7 +460,7 @@ void Pile::waitForMoving( Card*c )
 
 void Pile::remove(Card *c)
 {
-    assert(m_cards.contains(c));
+    Q_ASSERT(m_cards.contains(c));
     m_cards.removeAll(c);
 }
 

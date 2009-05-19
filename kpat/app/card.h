@@ -176,9 +176,11 @@ private:
     QList<Card*> m_hiddenCards;
 };
 
+#ifndef Q_OS_SYMBIAN
 #include <sys/time.h>
 
 extern QString gettime();
+#endif
 
 
 #endif

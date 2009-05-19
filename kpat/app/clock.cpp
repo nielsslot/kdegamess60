@@ -13,9 +13,7 @@
 */
 #include "clock.h"
 #include "deck.h"
-#include "patsolve/clock.h"
-
-#include <cassert>
+#include "../patsolve/clock.h"
 
 #ifndef Q_OS_SYMBIAN
 #include <klocale.h>

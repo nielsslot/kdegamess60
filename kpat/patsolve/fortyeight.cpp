@@ -5,6 +5,7 @@
 #include "../app/pile.h"
 #include "../app/deck.h"
 
+#ifndef Q_OS_SYMBIAN
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -12,6 +13,7 @@
 #include <cmath>
 #include <sys/types.h>
 #include <cstdarg>
+#endif
 
 #ifndef Q_OS_SYMBIAN
 #include <kdebug.h>
