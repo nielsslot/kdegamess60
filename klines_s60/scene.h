@@ -30,7 +30,7 @@
 // Disabled for now, but can be useful for non-touch screen devices
 // (need to implement keyboard events support for that or check that current
 // implementation works)
-//#define USE_FOCUS_ITEM
+#define USE_FOCUS_ITEM
 
 static const int FIELD_SIZE=9;
 
@@ -98,6 +98,10 @@ public:
         return FieldPos(static_cast<int>(( p.x()-m_playFieldRect.x()-m_playFieldBorderSize )/m_cellSize),
                         static_cast<int>(( p.y()-m_playFieldRect.y()-m_playFieldBorderSize )/m_cellSize));
     }
+
+#ifdef USE_FOCUS_ITEM
+    virtual void keyPressEvent ( QKeyEvent * keyEvent );
+#endif
 public slots:
     /**
      *  Starts new game

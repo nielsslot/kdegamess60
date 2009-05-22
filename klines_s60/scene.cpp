@@ -34,6 +34,29 @@
 
 #include <QDebug>
 
+#ifdef USE_FOCUS_ITEM
+#include <QKeyEvent>
+#include <QPen>
+
+#ifdef Q_OS_SYMBIAN
+// Symbian keycodes, see http://wiki.forum.nokia.com/index.php/Listening_Symbian_key_events_in_Qt
+//Symbian EKeyLeftArrow = 0x807
+const int KeyLeftArrow = 63495;
+
+//Symbian EKeyRightArrow = 0x808
+const int KeyRightArrow = 63496;
+
+//Symbian EKeyUpArrow = 0x809
+const int KeyUpArrow = 63497;
+
+//Symbian EKeyDownArrow = 0x80a
+const int KeyDownArrow = 63498;
+
+//Symbian EKeyDevice3
+const int KeyDevice3 = 63557;
+#endif // Q_OS_SYMBIAN
+#endif // USE_FOCUS_ITEM
+
 static const char SCORE_STATUS_TEXT[] = "<h2>Score: %1</h2>";
 
 inline uint qHash( const FieldPos& pos )
@@ -54,7 +77,11 @@ KLinesScene::KLinesScene( QObject* parent )
 #ifdef USE_FOCUS_ITEM
     m_focusItem = new QGraphicsRectItem( QRectF(0, 0, m_cellSize, m_cellSize), 0, this );
     m_focusItem->setZValue(1.0);
-    m_focusItem->setPen( Qt::DashLine );
+    QPen pen;
+    pen.setWidth(2);
+    pen.setStyle(Qt::DashLine);
+    m_focusItem->setPen(pen);
+    //m_focusItem->setPen( Qt::DashLine );
 #endif
 
     m_scoreItem = new QGraphicsTextItem( 0 );
@@ -89,7 +116,7 @@ void KLinesScene::startNewGame()
     m_nextColors.clear();
 #ifdef USE_FOCUS_ITEM
     m_focusItem->setPos(0, 0);
-    m_focusItem->hide();
+    //m_focusItem->hide();
 #endif
 
     m_popupItem->forceHide();
@@ -132,7 +159,7 @@ void KLinesScene::resizeScene(int width,int height)
 {
 #ifdef USE_FOCUS_ITEM
     // store focus item field pos (calculated using old cellSize)
-    //FieldPos focusRectFieldPos = pixToField( m_focusItem->pos() );
+    FieldPos focusRectFieldPos = pixToField( m_focusItem->pos() );
 #endif
 
     bool hasBorder = KLinesRenderer::self()->hasBorderElement();
@@ -609,6 +636,65 @@ void KLinesScene::cellSelected()
 
     // we're taking the center of the cell
     selectOrMove( pixToField( m_focusItem->pos() + QPointF(m_cellSize/2,m_cellSize/2) ) );
+}
+
+void KLinesScene::keyPressEvent ( QKeyEvent * keyEvent )
+{
+#ifdef Q_OS_SYMBIAN
+	switch (keyEvent->nativeVirtualKey())
+	{
+		case KeyUpArrow:
+		{
+			moveFocusUp();
+		}
+		break;
+		case KeyDownArrow:
+		{
+			moveFocusDown();
+		}
+		break;
+		case KeyLeftArrow:
+		{
+			moveFocusLeft();
+		}
+		break;
+		case KeyRightArrow:
+		{
+			moveFocusRight();
+		}
+		break;
+		case KeyDevice3:
+		{
+			cellSelected();
+		}
+		break;
+	}
+
+#else
+
+	switch(keyEvent->key()) {
+		case Qt::Key_Up : {
+			moveFocusUp();
+		}
+		break;
+		case Qt::Key_Down : {
+			moveFocusDown();
+		}
+		break;
+		case Qt::Key_Left : {
+			moveFocusLeft();
+		}
+		break;
+		case Qt::Key_Right : {
+			moveFocusRight();
+		}
+		break;
+		case Qt::Key_Space : {
+			cellSelected();
+		}
+		break;
+	}
+#endif
 }
 
 #endif // USE_FOCUS_ITEM
