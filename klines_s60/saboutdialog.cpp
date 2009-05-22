@@ -18,6 +18,7 @@
 #include "saboutdialog.h"
 
 #include <QLabel>
+#include <QPushButton>
 #include <QVBoxLayout>
 #include <QScrollArea>
 
@@ -27,7 +28,7 @@ public:
     SAboutDialogPrivate() :
         m_wgtScrollArea(0), m_wgtAppInfo(0),
         m_lblAppNameVer(0), m_lblLicenseNote(0),
-        m_lblAuthors(0), m_lblCredits(0)
+        m_lblAuthors(0), m_lblCredits(0), m_btnClose(0)
     {}
 
     QScrollArea* m_wgtScrollArea;
@@ -38,6 +39,8 @@ public:
     QLabel* m_lblLicenseNote;
     QLabel* m_lblAuthors;
     QLabel* m_lblCredits;
+
+    QPushButton* m_btnClose;
 };
 
 SAboutDialog::SAboutDialog(QWidget* parent)
@@ -78,6 +81,10 @@ SAboutDialog::SAboutDialog(QWidget* parent)
 
     d->m_wgtScrollArea->setWidget(d->m_wgtAppInfo);
     d->m_wgtScrollArea->setWidgetResizable(true);
+
+    d->m_btnClose = new QPushButton("Close", this);
+    connect(d->m_btnClose, SIGNAL(clicked()), this, SLOT(close()));
+    mainLayout->addWidget(d->m_btnClose);
 }
 
 SAboutDialog::~SAboutDialog()

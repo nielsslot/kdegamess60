@@ -132,7 +132,7 @@ void KLinesMainWindow::showAboutDialog()
     dlg.addCredit("Eugene Trounev", "SVG artwork", "it-s@gmail.com");
 
     QDesktopWidget desktop;
-    dlg.resize( desktop.availableGeometry().width(), desktop.availableGeometry().height()/2 );
+    dlg.resize( desktop.availableGeometry().width(), desktop.availableGeometry().height()*0.75 );
 
     dlg.exec();
 }
