@@ -30,6 +30,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QSet>
+#include <QTime>
 #include <QMessageBox>
 
 #include <QDebug>
@@ -96,6 +97,8 @@ KLinesScene::KLinesScene( QObject* parent )
 
     m_popupItem = new KGamePopupItem;
     addItem(m_popupItem);
+
+    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
     startNewGame();
 }
